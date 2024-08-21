@@ -1,44 +1,9 @@
 # 端口、数据源、thymeleaf、mybatis、表单转换
 server:
   port: 9981
-  
-web:
-  upload-path: /root/java/upload/
-
 
 spring:
-  datasource:
-    username: tky
-    password: P@ssw0rd
-    url: jdbc:mysql://47.92.219.111:3306/tky
 
-  thymeleaf:
-    cache: false
-
-  mvc:
-    hiddenmethod:
-      filter:
-        enabled: true
-    throw-exception-if-no-handler-found: true
-
-  jackson:
-    date-format: yyyy-MM-dd
-    time-zone: GMT+8
-    
-  resources:
-    static-locations: file:${web.upload-path}, classpath:static/
-    
-    
-mybatis:
-  mapper-locations: classpath:mybatis/mapper/*.xml
-  type-aliases-package: com.tky.*.entity
-  configuration:
-    map-underscore-to-camel-case: true  # 驼峰转换
-
-logging:
-  level:
-    com.tky: debug
-    
-
-
+  profiles:
+    active: dev
 
