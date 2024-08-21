@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.zhanpin.mapper.ZhanpinDtlMapper">
+    
+    <resultMap id="zhanpindtlMap" type="ZhanpinDtl">
+        <id column="dtl_id" property="dtlId" />
+        <result column="zhanpin_id" property="zhanpinId"/>
+        <result column="name" property="name"/>
+        <result column="qixian" property="qixian"/>
+        <result column="num" property="num"/>
+        <result column="yijiao" property="yijiao"/>
+        <result column="address" property="address"/>
+        <result column="address1" property="address1"/>
+        <result column="company" property="company"/>
+        <result column="pname" property="pname"/>
+        <result column="ptel" property="ptel"/>
+        <result column="qyname" property="qyname"/>
+        <result column="qytel" property="qytel"/>
+        <result column="beizhu" property="beizhu"/>
+        <result column="dept_id" property="deptId"/>
+        <association property="dept" column="dept_id" javaType="ZhanpinDept">
+            <id column="dept_id" property="deptId"/>
+            <result column="dept_name" property="deptName"/>
+        </association>
+    </resultMap>
+    
+    <!-- 查询展品列表数据 -->
+    <select id="getZhanpinDtlList" parameterType="com.tky.zhanpin.vo.ZhanpinDtlQuery" resultMap="zhanpindtlMap">
+        select * from zhanpindtl a left join zhanpindept b on a.dept_id = b.dept_id
+        where a.zhanpin_id = #{zhanpinId} 
+        order by dtl_id desc
+        limit #{start},#{limit}
+    </select>
+    <!-- 统计展品数据量 -->
+    <select id="countZhanpinDtlList" parameterType="com.tky.zhanpin.vo.ZhanpinDtlQuery" resultType="Long">
+        select count(1) from zhanpindtl  where zhanpin_id = #{zhanpinId} 
+    </select>
+
+    <sql id="getZhanpinDtlListWhere">
+        <where>
+           
+            <if test="deptId != null">
+                <![CDATA[
+                a.zhanpin_id = #{zhanpinId} 
+                ]]>
+            </if>
+        </where>
+    </sql>
+
+    
+
+    <delete id="deleteZhanpinDtlByIds" parameterType="String">
+        delete from zhanpindtl where dtl_id in (${ids})
+    </delete>
+
+    <select id="getZhanpinDtlById" parameterType="Integer" resultType="ZhanpinDtl">
+        select * from zhanpindtl where dtl_id = #{id}
+    </select>
+    
+    
+    
+    <insert id="addZhanpinDtl" parameterType="Zhanpin">
+        insert into zhanpindtl
+        (zhanpin_id,name,num,qixian,yijiao,address,address1,dept_id,company,pname,ptel,qyname,qytel,beizhu)
+        values
+        (#{zhanpinId},#{name},#{num},#{qixian},#{yijiao},#{address},#{address1},#{deptId},#{company},#{pname},#{ptel},#{qyname},#{qytel},#{beizhu})
+    </insert>
+    
+
+    <update id="updateZhanpinDtl" parameterType="ZhanpinDtl">
+        update zhanpindtl
+        set name = #{name},
+            zhanpin_id = #{zhanpinId},
+            num = #{num},
+            qixian = #{qixian},
+            yijiao = #{yijiao},
+            address = #{address},
+            address1 = #{address1},
+            dept_id = #{deptId},
+            company = #{company},
+            pname = #{pname},
+            ptel = #{ptel},
+            qyname = #{qyname},
+            qytel = #{qytel},
+            beizhu = #{beizhu}
+        where dtl_id = #{dtlId}
+    </update>
+</mapper>

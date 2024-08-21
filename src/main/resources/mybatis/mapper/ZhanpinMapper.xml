@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.zhanpin.mapper.ZhanpinMapper">
+    
+    <resultMap id="zhanpinMap" type="Zhanpin">
+        <id column="zhanpin_id" property="zhanpinId" />
+        <result column="name" property="name"/>
+        <result column="qixian" property="qixian"/>
+        <result column="num" property="num"/>
+        <result column="yijiao" property="yijiao"/>
+        <result column="address" property="address"/>
+        <result column="address1" property="address1"/>
+        <result column="company" property="company"/>
+        <result column="pname" property="pname"/>
+        <result column="ptel" property="ptel"/>
+        <result column="qyname" property="qyname"/>
+        <result column="qytel" property="qytel"/>
+        <result column="beizhu" property="beizhu"/>
+        <result column="dept_id" property="deptId"/>
+        <association property="dept" column="dept_id" javaType="ZhanpinDept">
+            <id column="dept_id" property="deptId"/>
+            <result column="dept_name" property="deptName"/>
+        </association>
+    </resultMap>
+    
+    <!-- 查询展品列表数据 -->
+    <select id="getZhanpinList" parameterType="com.tky.zhanpin.vo.ZhanpinQuery" resultMap="zhanpinMap">
+        select * from zhanpin a left join zhanpindept b on a.dept_id = b.dept_id
+        <include refid="getZhanpinListWhere"></include>
+        order by zhanpin_id desc
+        limit #{start},#{limit}
+    </select>
+    <!-- 统计展品数据量 -->
+    <select id="countZhanpinList" parameterType="com.tky.zhanpin.vo.ZhanpinQuery" resultType="Long">
+        select count(1) from zhanpin a
+        <include refid="getZhanpinListWhere"></include>
+    </select>
+
+    <sql id="getZhanpinListWhere">
+        <where>
+            <if test="name != null">
+                a.name like '%' #{name} '%'
+            </if>
+            <if test="startDate != null">
+                <![CDATA[
+                and a.yijiao >= #{startDate}
+                ]]>
+            </if>
+            <if test="endDate != null">
+                <![CDATA[
+                and a.yijiao <= #{endDate}
+                ]]>
+            </if>
+            <if test="company != null">
+                <![CDATA[
+                and a.company like '%' #{company} '%'
+                ]]>
+            </if>
+            <if test="deptId != null">
+                <![CDATA[
+                and a.dept_id = #{deptId} 
+                ]]>
+            </if>
+        </where>
+    </sql>
+
+    
+
+    <delete id="deleteZhanpinByIds" parameterType="String">
+        delete from zhanpin where zhanpin_id in (${ids})
+    </delete>
+
+    <select id="getZhanpinById" parameterType="Integer" resultType="Zhanpin">
+        select * from zhanpin where zhanpin_id = #{id}
+    </select>
+    
+    <select id="getZhanpinIdByName" parameterType="String" resultType="Integer">
+        select zhanpin_id from zhanpin where name = #{name} order by zhanpin_id desc limit 1
+    </select>
+    
+    
+    <insert id="addZhanpin" parameterType="Zhanpin">
+        insert into zhanpin
+        (name,num,qixian,yijiao,address,address1,dept_id,company,pname,ptel,qyname,qytel,beizhu)
+        values
+        (#{name},#{num},#{qixian},#{yijiao},#{address},#{address1},#{deptId},#{company},#{pname},#{ptel},#{qyname},#{qytel},#{beizhu})
+    </insert>
+    
+
+    <update id="updateZhanpin" parameterType="Zhanpin">
+        update zhanpin
+        set name = #{name},
+            num = #{num},
+            qixian = #{qixian},
+            yijiao = #{yijiao},
+            address = #{address},
+            address1 = #{address1},
+            dept_id = #{deptId},
+            company = #{company},
+            pname = #{pname},
+            ptel = #{ptel},
+            qyname = #{qyname},
+            qytel = #{qytel},
+            beizhu = #{beizhu}
+        where zhanpin_id = #{zhanpinId}
+    </update>
+</mapper>
