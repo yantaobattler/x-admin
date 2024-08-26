@@ -23,7 +23,7 @@ spring:
     time-zone: GMT+8
     
   resources:
-    static-locations: file:${web.upload-path}, classpath:static/
+    static-locations: file:${web.upload-path}, classpath:static/, classpath:templates/
     
     
 mybatis:

@@ -1,9 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">       
 <mapper namespace="com.tky.user.mapper.UserMapper">
-    <select id="getUser" parameterType="User" resultType="User">
-        select * from user where username=#{username}
+
+	<resultMap id="userMap" type="User">
+        <id column="user_id" property="user_id" />
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="chinesename" property="chinesename"/>
+        <result column="create_time" property="create_time"/>
+        <result column="last_time" property="last_time"/>
+        <result column="disabled" property="disabled"/>
+
+
+    </resultMap>
+    
+    
+    <select id="getUser" parameterType="User" resultMap="userMap">
+        select * from u_user where username=#{username}
+    </select>
+    
+    
+    <select id="chgUserinfo" parameterType="User" resultMap="userMap">
+        update u_user set chinesename=#{chinesename} where username=#{username}
+    </select>
+    
+    
+    <select id="chgpwd" parameterType="User" resultMap="userMap">
+        update u_user set password=#{password} where username=#{username}
     </select>
 </mapper>

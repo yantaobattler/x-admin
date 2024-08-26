@@ -18,4 +18,17 @@ public class UserServiceImpl implements UserService {
     public User login(User user) {
         return userMapper.getUser(user);
     }
+    
+    @Override
+    public User chgUserinfo(User user) {
+    	userMapper.chgUserinfo(user);
+    	return userMapper.getUser(user);
+    }
+    
+    @Override
+    public void chgpwd(User user) {
+    	userMapper.chgpwd(user);
+    	
+    }
+
 }

@@ -13,29 +13,29 @@ public class MyWebConfig implements WebMvcConfigurer {
 
 	
 //	登录拦截器，暂时不需要
-//    @Autowired
-//    @Qualifier(value = "loginInterceptor")
-//    private HandlerInterceptor handlerInterceptor;
-//
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        InterceptorRegistration registration
-//                   = registry.addInterceptor(handlerInterceptor);
-//        // 拦截请求
-//        registration.addPathPatterns("/**");
-//        // 放行请求
-//        registration.excludePathPatterns(
-//                "/login",
-//                "/captcha",
-//                "/user/login",
-//                "/user/logout",
-//                "/layui/**",
-//                "/lib/**",
-//                "/webjars/**",
-//                "/api/**",
-//                "/css/**",
-//                "/js/**",
-//                "/images/**"
-//        );
-//    }
+    @Autowired
+    @Qualifier(value = "loginInterceptor")
+    private HandlerInterceptor handlerInterceptor;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        InterceptorRegistration registration
+                   = registry.addInterceptor(handlerInterceptor);
+        // 拦截请求
+        registration.addPathPatterns("/**");
+        // 放行请求
+        registration.excludePathPatterns(
+                "/login",
+                "/captcha",
+                "/user/login",
+                "/user/logout",
+                "/layui/**",
+                "/lib/**",
+                "/webjars/**",
+                "/api/**",
+                "/css/**",
+                "/js/**",
+                "/images/**"
+        );
+    }
 }

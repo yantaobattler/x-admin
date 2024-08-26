@@ -60,16 +60,16 @@
                 <li class="layui-nav-item mobile layui-hide-xs" lay-unselect>
                     <a href="javascript:;" data-check-screen="full"><i class="fa fa-arrows-alt"></i></a>
                 </li>
-                <!-- 
+
                 
                 <li class="layui-nav-item layuimini-setting">
-                    <a href="javascript:;"><span th:text="${session.userInfo.chName}"></span></a>
+                    <a href="javascript:;">你好，<span th:text="${session.userInfo.chinesename}">！</span></a>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="javascript:;" layuimini-content-href="page/user-setting.html" data-title="基本资料" data-icon="fa fa-gears">基本资料<span class="layui-badge-dot"></span></a>
+                            <a href="javascript:;" layuimini-content-href="user/userinfo/ui" data-title="基本资料" data-icon="fa fa-gears">基本资料</span></a>
                         </dd>
                         <dd>
-                            <a href="javascript:;" layuimini-content-href="page/user-password.html" data-title="修改密码" data-icon="fa fa-gears">修改密码</a>
+                            <a href="javascript:;" layuimini-content-href="user/chgpwd/ui" data-title="修改密码" data-icon="fa fa-gears">修改密码</a>
                         </dd>
                         <dd>
                             <hr>
@@ -79,7 +79,7 @@
                         </dd>
                     </dl>
                 </li>
-                 -->
+
                 <li class="layui-nav-item layuimini-select-bgcolor" lay-unselect>
                     <a href="javascript:;" data-bgcolor="配色方案"><i class="fa fa-ellipsis-v"></i></a>
                 </li>
@@ -135,7 +135,7 @@
 <script th:src="@{/js/lay-config.js?v=2.0.0}" charset="utf-8"></script>
 <script th:inline="javascript">
 
-    var ctxPath = [[@{/}]];
+    var ctxPath = '/';
 
     layui.use(['jquery', 'layer', 'miniAdmin','miniTongji'], function () {
         var $ = layui.jquery,
@@ -169,9 +169,15 @@
         -->
 
         $('.login-out').on("click", function () {
-            layer.msg('退出登录成功', function () {
-                window.location = 'page/login-3.html';
+        	var url = ctxPath + "user/logout"
+            $.post(url,function (response) {
+                if(response.code == 0){
+                    layer.msg('退出登录成功', {icon: 6, time:2000}, function () {
+                        window.location = '/';
+                    });
+                }
             });
+        	
         });
     });
 </script>

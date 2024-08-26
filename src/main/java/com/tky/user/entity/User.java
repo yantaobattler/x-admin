@@ -12,9 +12,9 @@ public class User {
     private String username;
     private String password;
     private String chinesename;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH-mm-ss")
     private Date create_time;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH-mm-ss")
     private Date last_time;
     private String disabled;
 }
