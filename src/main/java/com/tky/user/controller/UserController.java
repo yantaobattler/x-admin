@@ -67,8 +67,8 @@ public class UserController {
         if(user != null){
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             // 参数1是请求密码，参数2是数据库中加密的值
-            boolean matches = param.getPassword().equals(user.getPassword());
-//          boolean matches = passwordEncoder.matches(param.getPassword(), user.getPassword());
+//            boolean matches = param.getPassword().equals(user.getPassword());
+          boolean matches = passwordEncoder.matches(param.getPassword(), user.getPassword());
 
             if(matches) {
                 // 登录成功
@@ -115,10 +115,10 @@ public class UserController {
     	user = userService.login(user);
     	BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         // 参数1是请求密码，参数2是数据库中加密的值
-        boolean matches = user.getPassword().equals(old_password);
-//      boolean matches = passwordEncoder.matches(param.getPassword(), user.getPassword());
+//        boolean matches = user.getPassword().equals(old_password);
+      boolean matches = passwordEncoder.matches(old_password, user.getPassword());
         if (matches) {
-        	user.setPassword(new_password);
+        	user.setPassword(passwordEncoder.encode(new_password));
         	userService.chgpwd(user);
         	session.invalidate();
             return Result.success("修改成功,请重新登录！");
