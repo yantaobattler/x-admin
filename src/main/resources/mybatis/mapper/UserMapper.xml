@@ -12,9 +12,27 @@
         <result column="create_time" property="create_time"/>
         <result column="last_time" property="last_time"/>
         <result column="disabled" property="disabled"/>
-
-
     </resultMap>
+    
+    
+    <sql id="getUserListWhere">
+        <where>
+            <if test="username != null">
+                a.username like '%' #{username} '%'
+            </if>
+            <if test="chinesename != null">
+                <![CDATA[
+                and a.chinesename like '%' #{chinesename} '%'
+                ]]>
+            </if>
+            <if test="disabled != null">
+                <![CDATA[
+                and a.disabled = #{disabled}
+                ]]>
+            </if>
+            
+        </where>
+    </sql>
     
     
     <select id="getUser" parameterType="User" resultMap="userMap">
@@ -29,5 +47,20 @@
     
     <select id="chgpwd" parameterType="User" resultMap="userMap">
         update u_user set password=#{password} where username=#{username}
+    </select>
+    
+    
+
+    <select id="getUserList" parameterType="com.tky.user.vo.UserQuery" resultMap="userMap">
+        select * from u_user a
+        <include refid="getUserListWhere"></include>
+        order by user_id desc
+        limit #{start},#{limit}
+    </select>
+
+
+    <select id="countUserList" parameterType="com.tky.user.vo.UserQuery" resultType="Long">
+        select count(1) from u_user a
+        <include refid="getUserListWhere"></include>
     </select>
 </mapper>

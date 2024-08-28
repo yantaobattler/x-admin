@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>用户管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="icon" th:href="@{images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/css/layuimini.css?v=2.0.4.2}" media="all">
+    <link rel="stylesheet" th:href="@{/css/themes/default.css}" media="all">
+    <link rel="stylesheet" th:href="@{/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <style>
+        .div-content{
+            background-color: white;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        .table-search-fieldset {
+            margin: 0;
+            border: 1px solid #e6e6e6;
+            padding: 10px 20px 5px 20px;
+            color: #6b6b6b;
+        }
+    </style>
+</head>
+<body>
+<div class="div-content">
+
+	<form class="layui-form layui-form-pane" id="form-search">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索条件</legend>
+            <div class="layui-form-item">
+
+                <div class="layui-inline" >
+                    <label class="layui-form-label">用户名</label>
+                    <div class="layui-input-inline"  style="width: 450px;">
+                        <input type="text" name="username" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">中文名</label>
+                    <div class="layui-input-inline"  style="width: 450px;">
+                        <input type="text" name="chinesename" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-input-inline"  style="width: 350px;">
+			        <label class="layui-form-label">是否禁用</label>
+			        <div class="layui-input-block">
+			            <select name="disabled" >
+			                <option value="">请选择</option>
+			                <option value="0">未禁用</option>
+			                <option value="1">已禁用</option>	                
+			            </select>
+			        </div>
+			    </div>
+                
+
+                <div class="layui-inline">
+                    <button id="btn-search" lay-submit lay-filter="btn-search-filter" type="button" class="layui-btn layui-btn-radius layui-btn-normal">
+                        <i class="layui-icon layui-icon-search"></i>
+                        搜索
+                    </button>
+                    <button id="btn-reset"  type="reset" class="layui-btn layui-btn-radius layui-btn-primary">
+                        <i class="layui-icon layui-icon-fonts-clear"></i>
+                        清空条件
+                    </button>
+                </div>
+
+            </div>
+        </fieldset>
+        </form>
+        
+    <div class="layuimini-main">
+        <script type="text/html" id="toolbar">
+            <div class="layui-btn-container">
+
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+               
+            </div>
+        </script>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+			<a class="layui-btn layui-btn-xs data-count-edit" lay-event="rule">角色配置</a>
+			<a class="layui-btn layui-btn-xs data-count-update" lay-event="pass">重置密码</a>
+        </script>
+
+    </div>
+</div>
+<script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+<script th:src="@{/js/lay-config.js?v=2.0.0}" charset="utf-8"></script>
+<script th:inline="javascript">
+
+	function refreshTable(){
+	    $("#btn-reset").click();
+	    $("#btn-search").click();
+	}
+	
+	
+	var ctx = '/';
+    layui.use(['form', 'table'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+        
+        table.render({
+            elem: '#currentTableId',
+            url: ctx + 'user/list',
+            toolbar: '#toolbar',
+            scrollPos :'reset',
+            defaultToolbar: ['filter', 'exports', 'print'],
+            cols: [
+            	[
+            	{field: 'user_id', title: '用户编号'},
+                {field: 'username', title: '用户名'},
+                {field: 'chinesename',title: '中文名'},
+                {field: 'disabled', width: 80, title: '禁用',templet: function(d){
+                	if(d.disabled){
+                		return  '<input type="checkbox" data="'+d.user_id+'" checked="" value="'+d.disabled+'" lay-skin="switch" lay-filter="switch" lay-text="开|关">';
+                	}else{
+                		return  '<input type="checkbox" data="'+d.user_id+'" value="'+d.disabled+'" lay-skin="switch" lay-filter="switch" lay-text="开|关">';	
+                	}
+                }},
+                {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}]
+            	],
+            limits: [10,  20,  50, 100],
+            page: true
+        });
+      //监听指定开关
+        form.on('switch(switch)', function (data) {
+           /*  layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
+                offset: '6px'
+            }); */
+/*               layer.msg('开关checked：' +  $(data.elem).attr("data"), {
+            offset: '6px'
+        	});  */
+        	$.ajax({
+        	    url: ctx +"user/"+$(data.elem).attr("data")+"/status?disable="+this.checked ,
+        	    type: 'PUT',
+        	    success: function(result) {
+        	    	layer.msg('修改成功');
+        	    }
+        	});
+           // layer.tips('温馨提示：默认开启', data.othis)
+        });
+        /**
+         * toolbar监听事件
+         */
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加操作
+                var index = layer.open({
+                    title: '添加用户',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['100%', '100%'],
+                    content: ctx + "user/addForm",
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            } else if (obj.event === 'delete') {  // 监听删除操作
+                var checkStatus = table.checkStatus('currentTableId')
+                    , data = checkStatus.data;
+                layer.alert(JSON.stringify(data));
+            } 
+        });
+
+        //监听表格复选框选择
+        table.on('checkbox(currentTableFilter)', function (obj) {
+            console.log(obj)
+        });
+        
+        
+     // 监听表单提交
+        form.on('submit(btn-search-filter)', function(data){
+            console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+            // 刷新表格
+            table.reload('currentTableId', {
+                where: { //设定异步数据接口的额外参数，任意设
+                	username: data.field.username,
+                	chinesename: data.field.chinesename,
+                	disabled: data.field.disabled
+                }
+                ,page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+     
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'rule') {
+                var index = layer.open({
+                    title: '配置角色',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['100%', '100%'],
+                    content: ctx + "user/select-rule?id="+data.user_id,
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+                return false;
+            } else if (obj.event === 'pass') {
+                var index = layer.open({
+                    title: '修改密码',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['100%', '100%'],
+                    content: ctx + "user/passwordForm?id="+data.user_id,
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+                return false;
+            }
+        });
+
+    });
+</script>
+
+</body>
+</html>

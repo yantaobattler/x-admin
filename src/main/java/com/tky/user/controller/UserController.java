@@ -3,7 +3,9 @@ package com.tky.user.controller;
 import com.tky.common.vo.Result;
 import com.tky.user.entity.User;
 import com.tky.user.service.UserService;
+import com.tky.user.vo.UserQuery;
 import com.tky.zhanpin.entity.Zhanpin;
+import com.tky.zhanpin.vo.ZhanpinQuery;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -84,19 +87,6 @@ public class UserController {
     
     @GetMapping("/userinfo/ui")
     public String toUserinfoUI(HttpServletRequest request, HttpSession session){
-    	
-    	// 获取session中所有的键值
-        Enumeration<?> enumeration = session.getAttributeNames();
-        // 遍历enumeration
-        while (enumeration.hasMoreElements()) {
-            // 获取session键值
-            String name = enumeration.nextElement().toString();
-            // 根据键值取session中的值
-            Object value = session.getAttribute(name);
-            // 打印结果
-            log.debug(name + " : " + value);
-        }
-
         return "user/user-setting";
     }
     
@@ -145,5 +135,21 @@ public class UserController {
         return Result.success();
     }
     
+    
+    
+    @GetMapping("")
+    public String toUserListUI(){
+        return "user/user-list";
+    }
+    
+    
+    @GetMapping("/list")
+    @ResponseBody
+    public Result<Object> getUserList(UserQuery param){
+    	System.out.println(param);
+        List<User> list = userService.getUserList(param);
+        Long count = userService.countUserList(param);
+        return Result.success(list,count);
+    }
     
 }
