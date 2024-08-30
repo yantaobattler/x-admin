@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -85,9 +86,36 @@ public class UserController {
     }
     
     
+    @GetMapping("")
+    public String toUserListUI(){
+        return "user/user-list";
+    }
+    
+    
+    @GetMapping("/list")
+    @ResponseBody
+    public Result<Object> getUserList(UserQuery param){
+    	System.out.println(param);
+        List<User> list = userService.getUserList(param);
+        Long count = userService.countUserList(param);
+        return Result.success(list,count);
+    }
+    
+    
+    
     @GetMapping("/userinfo/ui")
     public String toUserinfoUI(HttpServletRequest request, HttpSession session){
         return "user/user-setting";
+    }
+    
+    
+    @PutMapping("/userinfo")
+    @ResponseBody
+    public Result<Object> chgUserinfo(User user,  HttpSession session){
+    	user = userService.chgUserinfo(user);
+        user.setPassword(null);
+        session.setAttribute("userInfo", user);
+        return Result.success("修改成功！");
     }
     
     
@@ -96,10 +124,9 @@ public class UserController {
         return "user/user-password";
     }
     
-    
     @PostMapping("/chgpwd")
     @ResponseBody
-    public Result chgpwd(String new_password, String old_password, HttpSession session){
+    public Result<Object> chgpwd(String new_password, String old_password, HttpSession session){
 
     	User user = (User) session.getAttribute("userInfo");
     	user = userService.login(user);
@@ -118,14 +145,35 @@ public class UserController {
     }
     
     
-    @PutMapping("/userinfo")
-    @ResponseBody
-    public Result<Object> chgUserinfo(User user,  HttpSession session){
-    	user = userService.chgUserinfo(user);
-        user.setPassword(null);
-        session.setAttribute("userInfo", user);
-        return Result.success("修改成功！");
+    @GetMapping("/adduser/ui")
+    public String toAdduserUI(Model model){
+        return "user/add_form";
     }
+    
+    
+    @PostMapping("/adduser")
+    @ResponseBody
+    public Result<Object> addUser(User user){
+    	
+        return userService.addUser(user);
+    }
+    
+    
+    @PutMapping("/{ids}/status")
+    @ResponseBody
+    public Result<Object> chgUserdisabled(@PathVariable("ids") String user_id,  boolean disable){
+        return userService.chgUserdisabled(user_id, disable);
+    }
+    
+    
+    
+    @PutMapping("/{ids}/rstpwd")
+    @ResponseBody
+    public Result<Object> rstpwd(@PathVariable("ids") String user_id){
+        return userService.rstpwd(user_id);
+    }
+    
+    
     
     
     @PostMapping("/logout")
@@ -137,19 +185,6 @@ public class UserController {
     
     
     
-    @GetMapping("")
-    public String toUserListUI(){
-        return "user/user-list";
-    }
     
-    
-    @GetMapping("/list")
-    @ResponseBody
-    public Result<Object> getUserList(UserQuery param){
-    	System.out.println(param);
-        List<User> list = userService.getUserList(param);
-        Long count = userService.countUserList(param);
-        return Result.success(list,count);
-    }
     
 }

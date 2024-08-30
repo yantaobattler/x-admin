@@ -92,9 +92,22 @@
 </div>
 <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
 <script th:src="@{/js/lay-config.js?v=2.0.0}" charset="utf-8"></script>
+<script type="text/html" id="convertdisabled">
+        {{#
+            if(d.disabled == '0'){
+                return '<input type="checkbox" data="'+d.user_id+'" checked="" value="ture" lay-skin="switch" lay-filter="switch" lay-text="开|关">';
+            }else if(d.disabled == '1'){
+                return '<input type="checkbox" data="'+d.user_id+'" value="false" lay-skin="switch" lay-filter="switch" lay-text="开|关">';
+            }else{
+                return '<input type="checkbox" data="'+d.user_id+'" value="false" lay-skin="switch" lay-filter="switch" lay-text="开|关">';
+            }
+        }}
+    </script>
+
 <script th:inline="javascript">
 
 	function refreshTable(){
+		var $ = layui.$;
 	    $("#btn-reset").click();
 	    $("#btn-search").click();
 	}
@@ -114,16 +127,10 @@
             defaultToolbar: ['filter', 'exports', 'print'],
             cols: [
             	[
-            	{field: 'user_id', title: '用户编号'},
+            	{field: 'user_id', title: '用户编号', width: 120},
                 {field: 'username', title: '用户名'},
                 {field: 'chinesename',title: '中文名'},
-                {field: 'disabled', width: 80, title: '禁用',templet: function(d){
-                	if(d.disabled){
-                		return  '<input type="checkbox" data="'+d.user_id+'" checked="" value="'+d.disabled+'" lay-skin="switch" lay-filter="switch" lay-text="开|关">';
-                	}else{
-                		return  '<input type="checkbox" data="'+d.user_id+'" value="'+d.disabled+'" lay-skin="switch" lay-filter="switch" lay-text="开|关">';	
-                	}
-                }},
+                {field: 'disabled', width: 80, title: '可用',templet: '#convertdisabled'},
                 {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}]
             	],
             limits: [10,  20,  50, 100],
@@ -131,14 +138,14 @@
         });
       //监听指定开关
         form.on('switch(switch)', function (data) {
-           /*  layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
+            /*layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
                 offset: '6px'
-            }); */
-/*               layer.msg('开关checked：' +  $(data.elem).attr("data"), {
+            });
+              layer.msg('开关checked：' +  $(data.elem).attr("data"), {
             offset: '6px'
         	});  */
         	$.ajax({
-        	    url: ctx +"user/"+$(data.elem).attr("data")+"/status?disable="+this.checked ,
+        	    url: ctx +"user/"+$(data.elem).attr("data")+'/status?disable='+this.checked ,
         	    type: 'PUT',
         	    success: function(result) {
         	    	layer.msg('修改成功');
@@ -150,15 +157,13 @@
          * toolbar监听事件
          */
         table.on('toolbar(currentTableFilter)', function (obj) {
-            if (obj.event === 'add') {  // 监听添加操作
+            if (obj.event == 'add') {  // 监听添加操作
                 var index = layer.open({
                     title: '添加用户',
                     type: 2,
-                    shade: 0.2,
-                    maxmin:true,
-                    shadeClose: true,
+                    shadeClose: false,
                     area: ['100%', '100%'],
-                    content: ctx + "user/addForm",
+                    content: ctx + "user/adduser/ui",
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -178,7 +183,7 @@
         
      // 监听表单提交
         form.on('submit(btn-search-filter)', function(data){
-            console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+            //console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
             // 刷新表格
             table.reload('currentTableId', {
                 where: { //设定异步数据接口的额外参数，任意设
@@ -211,8 +216,9 @@
                 });
                 return false;
             } else if (obj.event === 'pass') {
-                var index = layer.open({
-                    title: '修改密码',
+                /*
+            	var index = layer.open({
+                    title: '重置密码',
                     type: 2,
                     shade: 0.2,
                     maxmin:true,
@@ -224,6 +230,14 @@
                     layer.full(index);
                 });
                 return false;
+                */
+                $.ajax({
+            	    url: ctx +"user/"+data.user_id+'/rstpwd' ,
+            	    type: 'PUT',
+            	    success: function(result) {
+            	    	layer.msg('重置密码成功');
+            	    }
+            	});
             }
         });
 

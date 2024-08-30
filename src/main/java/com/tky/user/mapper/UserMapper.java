@@ -15,4 +15,10 @@ public interface UserMapper {
 	public Long countUserList(UserQuery param);
 
 	public List<User> getUserList(UserQuery param);
+
+	public void addUser(User user);
+
+	public void chgUserdisabled(User user);
+
+	public void rstpwd(User user);
 }

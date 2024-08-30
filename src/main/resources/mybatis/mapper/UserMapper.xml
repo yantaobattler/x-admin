@@ -27,7 +27,7 @@
             </if>
             <if test="disabled != null">
                 <![CDATA[
-                and a.disabled = #{disabled}
+                and a.disabled like '%' #{disabled} '%'
                 ]]>
             </if>
             
@@ -36,7 +36,8 @@
     
     
     <select id="getUser" parameterType="User" resultMap="userMap">
-        select * from u_user where username=#{username}
+        select * from u_user where username=#{username} 
+        and disabled = '0'
     </select>
     
     
@@ -63,4 +64,21 @@
         select count(1) from u_user a
         <include refid="getUserListWhere"></include>
     </select>
+    
+    
+    <insert id="addUser" parameterType="User">
+        insert into u_user
+        (username, password, chinesename, create_time, disabled)
+        values
+        (#{username},#{password},#{chinesename},#{create_time},#{disabled})
+    </insert>
+    
+    
+    <update id="chgUserdisabled" parameterType="User">
+        update u_user set disabled=#{disabled} where user_id=#{user_id}
+    </update>
+    
+    <update id="rstpwd" parameterType="User">
+        update u_user set password=#{password} where user_id=#{user_id}
+    </update>
 </mapper>

@@ -43,13 +43,13 @@
             },
              {
               "title": "角色管理",
-              "href": "zhanpin",
+              "href": "role",
               "icon": "layui-icon layui-icon-user",
               "target": "_self"
             },
              {
               "title": "菜单管理",
-              "href": "zhanpin",
+              "href": "menu",
               "icon": "layui-icon layui-icon-key",
               "target": "_self"
             }           
