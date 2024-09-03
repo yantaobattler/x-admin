@@ -38,6 +38,17 @@ public class RoleServiceImpl implements RoleService {
 	}
 	
 	
+	@Override
+	public Result<Object> addRole(Role role){
+
+//        System.out.println(role);
+        role.setDisabled("0");
+		roleMapper.addRole(role);
+		
+		return Result.success("新增角色成功！");
+	}
+	
+	
 	
 	
 //	

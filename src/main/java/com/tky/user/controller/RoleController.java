@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -44,10 +45,17 @@ public class RoleController {
     
     
     
-    @GetMapping("/userinfo/ui")
+    @GetMapping("/addrole/ui")
     public String toUserinfoUI(HttpServletRequest request, HttpSession session){
-        return "user/user-setting";
+        return "user/add_role";
     }
+    
+    
+	@PostMapping("/addrole")
+	@ResponseBody
+	public Result<Object> addUser(Role role){	  	
+	    return roleService.addRole(role);
+	}
     
     
 //    @PutMapping("/userinfo")

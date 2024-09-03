@@ -11,4 +11,6 @@ public interface RoleMapper {
 
 	Long countRoleList(RoleQuery param);
 
+	void addRole(Role role);
+
 }

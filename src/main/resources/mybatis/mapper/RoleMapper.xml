@@ -47,6 +47,12 @@
     </select>
     
     
+    <insert id="addRole" parameterType="Role">
+        insert into u_role
+        (role_name, description, disabled, sort)
+        values
+        (#{role_name},#{description},#{disabled},#{sort})
+    </insert>
     
  
 </mapper>
