@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">       
+<mapper namespace="com.tky.user.mapper.RoleMapper">
+
+	<resultMap id="roleMap" type="Role">
+        <id column="role_id" property="role_id" />
+        <result column="role_name" property="role_name"/>
+        <result column="description" property="description"/>
+        <result column="disabled" property="disabled"/>
+        <result column="sort" property="sort"/>
+    </resultMap>
+    
+    
+    <sql id="getRoleListWhere">
+        <where>
+            <if test="role_name != null">
+                a.role_name like '%' #{role_name} '%'
+            </if>
+            <if test="description != null">
+                <![CDATA[
+                and a.description like '%' #{description} '%'
+                ]]>
+            </if>
+            <if test="disabled != null">
+                <![CDATA[
+                and a.disabled like '%' #{disabled} '%'
+                ]]>
+            </if>
+            
+        </where>
+    </sql>
+       
+    
+    <select id="getRoleList" parameterType="com.tky.user.vo.RoleQuery" resultMap="roleMap">
+        select * from u_role a
+        <include refid="getRoleListWhere"></include>
+        order by sort desc
+        limit #{start},#{limit}
+    </select>
+
+
+    <select id="countRoleList" parameterType="com.tky.user.vo.RoleQuery" resultType="Long">
+        select count(1) from u_role a
+        <include refid="getRoleListWhere"></include>
+    </select>
+    
+    
+    
+ 
+</mapper>

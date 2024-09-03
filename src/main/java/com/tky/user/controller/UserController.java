@@ -95,7 +95,6 @@ public class UserController {
     @GetMapping("/list")
     @ResponseBody
     public Result<Object> getUserList(UserQuery param){
-    	System.out.println(param);
         List<User> list = userService.getUserList(param);
         Long count = userService.countUserList(param);
         return Result.success(list,count);
