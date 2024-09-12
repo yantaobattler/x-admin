@@ -3,9 +3,86 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tky.user.mapper.MenuMapper">
+
+	<resultMap id="menuMap" type="Menu">
+        <id column="sys_menu_id" property="sys_menu_id" />
+        <result column="title" property="title"/>
+        <result column="href" property="href"/>
+        <result column="icon" property="icon"/>
+        <result column="pid" property="pid"/>
+        <result column="disabled" property="disabled"/>
+        <result column="target" property="target"/>
+        <result column="sort" property="sort"/>
+        <result column="remark" property="remark"/>
+        <result column="create_at" property="create_at"/>
+        <result column="update_at" property="update_at"/>
+        <result column="delete_at" property="delete_at"/>
+    </resultMap>
+
     <select id="getInitmenu" parameterType="User" resultType="User">
         select * from u_system_menu where sys_menu_id in 
         (select sys_menu_id from u_role_sys_menu where role_id in 
         (select role_id from u_user_role where user_id ='1'))
     </select>
+    
+    
+    <select id="getMenuList"  resultMap="menuMap">
+        select * from u_system_menu  order by sort 
+
+    </select>
+
+
+    <select id="countMenuList"  resultType="Long">
+        select count(1) from u_system_menu
+    </select>
+    
+    
+    <update id="chgMenudisabled" parameterType="Menu">
+        update u_system_menu set disabled=#{disabled} where sys_menu_id=#{sys_menu_id}
+    </update>
+    
+    
+    
+    <select id="getMenubyid"  resultType="Menu"  parameterType="String">
+        select * from u_system_menu where sys_menu_id=#{id}
+    </select>
+    
+    
+    
+    <insert id="addMenu" parameterType="Menu">
+        insert into u_system_menu
+        (title, href, icon, pid, disabled, target, sort, remark)
+        values
+        (#{title},#{href},#{icon},#{pid},#{disabled},#{target},#{sort},#{remark})
+    </insert>
+    
+    
+    <update id="editMenu" parameterType="Menu">
+        update u_system_menu set 
+        title=#{title} ,
+        href=#{href} ,
+        icon=#{icon} ,
+        disabled=#{disabled} ,
+        target=#{target} ,
+        sort=#{sort} ,
+        remark=#{remark} 
+        where sys_menu_id=#{sys_menu_id}
+    </update>
+    
+    
+    <select id="countMenubypid"  resultType="Long">
+        select count(1) from u_system_menu  where pid=#{id}
+    </select>
+    
+    
+    <delete id="deleteRoleMenubyMenu"  parameterType="String">
+        delete from u_role_sys_menu  where sys_menu_id=#{id}
+    </delete>
+    
+    
+    <delete id="deleteMenu" parameterType="String">
+        delete from u_system_menu  where sys_menu_id=#{id}
+    </delete>
+    
+    
 </mapper>
