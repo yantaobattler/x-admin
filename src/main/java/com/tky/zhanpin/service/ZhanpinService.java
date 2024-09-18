@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tky.zhanpin.entity.ZhanpinDept;
 import com.tky.zhanpin.entity.ZhanpinDtl;
+import com.tky.common.vo.Result;
 import com.tky.zhanpin.entity.Zhanpin;
 import com.tky.zhanpin.vo.ZhanpinDtlQuery;
 import com.tky.zhanpin.vo.ZhanpinQuery;
@@ -33,4 +34,10 @@ public interface ZhanpinService {
     
     
     Map<String, Object> uploadImage(MultipartFile file, HttpServletRequest request);
+    
+	ZhanpinDtl getZhanpinDtlById(Integer id);
+	void updateZhanpindtl(ZhanpinDtl zhanpindtl);
+	void updateZhanpinByLastDtl(ZhanpinDtl zhanpindtl);
+	Result<Object> deleteZhanpinDtlpre(Integer id);
+	void deleteZhanpinDtlandinfo(int id);
 }

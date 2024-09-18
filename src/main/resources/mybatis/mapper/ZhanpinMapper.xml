@@ -71,6 +71,11 @@
     <delete id="deleteZhanpinByIds" parameterType="String">
         delete from zhanpin where zhanpin_id in (${ids})
     </delete>
+    
+    
+    <delete id="deleteZhanpinByid" parameterType="Integer">
+        delete from zhanpin where zhanpin_id = #{id}
+    </delete>
 
     <select id="getZhanpinById" parameterType="Integer" resultType="Zhanpin">
         select * from zhanpin where zhanpin_id = #{id}

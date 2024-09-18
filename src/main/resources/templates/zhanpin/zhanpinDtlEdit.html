@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/css/layuimini.css?v=2.0.4.2}" media="all">
+    <link rel="stylesheet" th:href="@{/css/themes/default.css}" media="all">
+    <link rel="stylesheet" th:href="@{/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <style>
+        body{
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<form class="layui-form" action="" th:object="${zhanpindtl}">
+    <input type="hidden" th:field="*{zhanpinId}">
+    <input type="hidden" th:field="*{dtlId}">
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">展品名称</label>
+        <div class="layui-input-block">
+            <input type="text" th:field="*{name}" required="required"  style="background:#CCCCCC" readonly="true" lay-verify="required" placeholder="请输入展品名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">企业名称</label>
+        <div class="layui-input-block">
+            <input type="text" th:field="*{company}" required="required" style="background:#CCCCCC" readonly="true"  lay-verify="required" placeholder="请输入企业名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">企业联系人</label>
+        <div class="layui-input-block">
+            <input type="text" th:field="*{qyname}"  style="background:#CCCCCC" readonly="true"   placeholder="请输入企业联系人" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">联系人电话</label>
+        <div class="layui-input-block">
+            <input type="text" th:field="*{qytel}"   style="background:#CCCCCC" readonly="true"   placeholder="请输入企业联系人电话" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">存放期限</label>
+        <div class="layui-input-block">
+            <input type="radio" th:field="*{qixian}" value="LS" title="临时">
+            <input type="radio" th:field="*{qixian}" value="YJ" title="永久">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">数量</label>
+        <div class="layui-input-block">
+            <input type="text" th:field="*{num}" required="required"  lay-verify="required|number" placeholder="请输入展品数量" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">移交日期</label>
+        <div class="layui-input-block">
+            <input type="text" th:field="*{yijiao}"  placeholder="请输入移交日期" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">展品位置</label>
+        <div class="layui-input-block">
+            <select th:field="*{deptId}" lay-verify="required">
+                <option value="">请选择</option>
+                <option th:each="dept:${deptList}" th:value="${dept.deptId}">
+                    <span th:text="${dept.deptName}"></span>
+                </option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">交接人</label>
+        <div class="layui-input-block">
+            <input type="text" th:field="*{pname}" required="required"  lay-verify="required" placeholder="请输入接收人姓名" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">交接人电话</label>
+        <div class="layui-input-block">
+            <input type="text" th:field="*{ptel}" required="required"  lay-verify="required" placeholder="请输入接收人联系电话" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <textarea th:field="*{beizhu}" placeholder="请输入备注信息" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    
+    
+    <div class="layui-form-inline">
+    	<input type="hidden" name="address"  class="address" >
+    	<label class="layui-form-label">展品预览</label>
+    	<div class="layui-upload"> 	         
+	         <div class="layui-upload-list"> 
+		          <img class="layui-upload-img" id="demo" width="400px" height="auto"> 
+		          <p id="demoText"></p> 
+	         </div> 
+    	</div>
+    </div>
+    <br />
+    <div class="layui-form-inline">
+    	<input type="hidden" name="address1"  class="address1" >
+    	<label class="layui-form-label">展位预览</label>
+    	<div class="layui-upload"> 	         
+	         <div class="layui-upload-list"> 
+		          <img class="layui-upload-img" id="demo1" width="400px" height="auto"> 
+		          <p id="demoText1"></p> 
+	         </div> 
+    	</div>
+    </div>
+    
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+        	<button type="button" class="layui-btn" id="uploadbutten">上传展品照片</button> 
+        	<button type="button" class="layui-btn" id="uploadbutten1">上传展位照片</button> 
+            <button id="btn-submit" class="layui-btn" lay-submit lay-filter="btn-submit-filter">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+    <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+    <script th:inline="javascript">
+        var ctxPath = "../";
+        layui.use(['laydate','table','form', 'upload', 'element'], function(){
+            var laydate = layui.laydate;
+            var table = layui.table;
+            var form = layui.form;
+            var upload = layui.upload;
+            var element = layui.element;
+            var $ = layui.$;
+            
+            var fileupload = $(".address");
+            var fileupload1 = $(".address1");
+            var index = 0;
+
+            laydate.render({
+                elem: '[name="yijiao"]' //指定元素
+            });
+            
+            //常规使用 - 普通图片上传---展品照片
+            var uploadInst = upload.render({
+              elem: '#uploadbutten'
+              ,url: ctxPath + "zhanpin/uploadImage"
+              ,accept: 'file'
+              ,size: 1000
+              ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                  $('#demo').attr('src', result); //图片链接（base64）
+                });
+                index = layer.load();
+              }
+              ,done: function(res){
+                //如果上传失败
+                if(res.code > 0){
+                  layer.close(index);
+                  return layer.msg('上传失败');
+                }
+                
+                
+                fileupload.attr("value", res.data.src);
+                 
+                $('#demoText').html(''); //置空上传失败的状态
+                layer.close(index);
+                layer.msg('上传完毕', {icon: 1});
+              }
+              ,error: function(){
+            	  layer.close(index);
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                  uploadInst.upload();
+                });
+              }
+            //进度条
+              //,progress: function(n, elem, e){                
+              //  if(n == 100){
+               //   layer.msg('上传完毕', {icon: 1});
+               // }
+              //}
+
+            });
+            
+            
+          //常规使用 - 普通图片上传---展位照片
+            var uploadInst1 = upload.render({
+              elem: '#uploadbutten1'
+              ,url: ctxPath + "zhanpin/uploadImage"
+              ,accept: 'file'
+              ,size: 1000
+              ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                  $('#demo1').attr('src', result); //图片链接（base64）
+                });
+                index = layer.load();
+              }
+              ,done: function(res){
+                //如果上传失败
+                if(res.code > 0){
+                  layer.close(index);
+                  return layer.msg('上传失败');
+                }
+                
+                
+                fileupload1.attr("value", res.data.src);
+                 
+                $('#demoText1').html(''); //置空上传失败的状态
+                layer.close(index);
+                layer.msg('上传完毕', {icon: 1});
+              }
+              ,error: function(){
+            	  layer.close(index);
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText1');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload1">重试</a>');
+                demoText.find('.demo-reload1').on('click', function(){
+                  uploadInst1.upload();
+                });
+              }
+            //进度条
+              //,progress: function(n, elem, e){                
+              //  if(n == 100){
+               //   layer.msg('上传完毕', {icon: 1});
+               // }
+              //}
+
+            });
+            
+
+            // 表单提交
+            form.on('submit(btn-submit-filter)', function(data){
+
+                //if(fileupload.attr("value") == null){
+                //    layer.msg('请上传展品照片', {icon: 2});
+                //    return false;
+                //  }
+                //if(fileupload1.attr("value") == null){
+                //    layer.msg('请上传展位照片', {icon: 2});
+                //    return false;
+                //  }
+                $("#btn-submit").attr("disabled","disabled").addClass("layui-btn-disabled");
+                
+                // 异步请求提交数据
+                var url = ctxPath + "zhanpin/updatedtl";
+                data.field._method = "PUT"; //put(新增dtl)，post新增单条
+                $.post(url,data.field,function (response) {
+                    if(response.code == 0){
+                        // 成功提示
+                        layer.msg(response.message, {
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        }, function(){
+
+                            // 关闭窗口
+                            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                            parent.layer.close(index); //再执行关闭
+                        });
+
+                    }else{
+                        $("#btn-submit").removeAttr("disabled","disabled").removeClass("layui-btn-disabled");
+                        // 失败则提示错误信息，窗口不关闭
+                        layer.alert(response.message, {
+                            icon: 2,
+                            anim: 6,
+                            title: "操作失败"
+                        });
+                    }
+                });
+                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            });
+        });
+    </script>
+</body>
+</html>

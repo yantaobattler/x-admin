@@ -37,6 +37,17 @@
     <select id="countZhanpinDtlList" parameterType="com.tky.zhanpin.vo.ZhanpinDtlQuery" resultType="Long">
         select count(1) from zhanpindtl  where zhanpin_id = #{zhanpinId} 
     </select>
+    
+    
+    <select id="countZhanpinDtl" parameterType="Integer" resultType="Long">
+        select count(1) from zhanpindtl  where dtl_id = #{id} 
+    </select>
+    
+    
+    <select id="countZhanpinDtlbyzhanpin" parameterType="Integer" resultType="Long">
+        select count(1) from zhanpindtl  where zhanpin_id = #{id} 
+    </select>
+    
 
     <sql id="getZhanpinDtlListWhere">
         <where>
@@ -54,9 +65,20 @@
     <delete id="deleteZhanpinDtlByIds" parameterType="String">
         delete from zhanpindtl where dtl_id in (${ids})
     </delete>
+    
+    
+    <delete id="deleteZhanpinDtlByid" parameterType="Integer">
+        delete from zhanpindtl where dtl_id = #{id} 
+    </delete>
 
     <select id="getZhanpinDtlById" parameterType="Integer" resultType="ZhanpinDtl">
         select * from zhanpindtl where dtl_id = #{id}
+    </select>
+    
+    
+    
+    <select id="getlastDtl" parameterType="Integer" resultType="ZhanpinDtl">
+        select * from zhanpindtl where zhanpin_id = #{id}  order by dtl_id desc  limit 1
     </select>
     
     

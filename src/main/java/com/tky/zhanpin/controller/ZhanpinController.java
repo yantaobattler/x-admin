@@ -67,6 +67,46 @@ public class ZhanpinController {
         model.addAttribute("deptList",zhanpinService.getAllDept());
         return "zhanpin/zhanpinEdit";
     }
+    
+    
+    @GetMapping("/dtlid/{id}")
+    public String getZhanpinDtlById(@PathVariable("id") Integer id,Model model){
+        ZhanpinDtl zhanpindtl = zhanpinService.getZhanpinDtlById(id);
+        model.addAttribute("zhanpindtl",zhanpindtl);
+        model.addAttribute("deptList",zhanpinService.getAllDept());
+        return "zhanpin/zhanpinDtlEdit";
+    }
+    
+    
+    @PutMapping("/zhanpin/updatedtl")
+    @ResponseBody
+    public Result<Object> updateZhanpinDtl(ZhanpinDtl zhanpindtl){
+        zhanpinService.updateZhanpindtl(zhanpindtl);
+        zhanpinService.updateZhanpinByLastDtl(zhanpindtl);
+        return Result.success("展品调整明细信息修改成功！");
+    }
+    
+    
+    @DeleteMapping("/deletedtlpre/{id}")
+    @ResponseBody
+    public Result<Object> deleteZhanpinDtlpre(@PathVariable("id") int id){       
+        return zhanpinService.deleteZhanpinDtlpre(id);
+    }
+    
+    
+    
+    @DeleteMapping("/deletedtlandinfo/{id}")
+    @ResponseBody
+    public Result<Object> deleteZhanpinDtlandinfo(@PathVariable("id") int id){
+        zhanpinService.deleteZhanpinDtlandinfo(id);
+//    	System.out.println(id);
+        return Result.success("删除展品成功！");
+    }
+    
+    
+    
+    
+    
 
     @PutMapping("")
     @ResponseBody

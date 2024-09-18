@@ -71,10 +71,17 @@
            return d.dept.deptName;
         }}
     </script>
+    
+    <script type="text/html" id="col-zhanpin-toolbar">
+		<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+        <a class="layui-btn layui-btn-xs" lay-event="delete">删除</a>
+    </script>
 
     <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}" charset="utf-8"></script>
     <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
     <script th:inline="javascript">
+    
+
         var ctxPath = "/";
         layui.use(['laydate','table','form', 'upload', 'element'], function(){
             var laydate = layui.laydate;
@@ -116,8 +123,75 @@
                     ,{field: 'address1', title: '展位照片', width:100 ,align: 'center', templet: function(d) { return '<div onclick="show_img(this)"><img src="../../'+d.address1.split(".")[0].substring(d.address1.split(".")[0].length - 36)+'.'+d.address1.split(".")[1]+'" ' + 'alt="" width="40px" height="40px"></a></div>'; }}
                     ,{field: 'beizhu', title: '备注', align: 'center'}
                     //,{field: 'address', title: '家庭住址'}
-                    //,{title: '操作', align: 'center', width: 115,toolbar: '#col-zhanpin-toolbar'}
+                    ,{title: '操作', align: 'center', width: 120,toolbar: '#col-zhanpin-toolbar'}
                 ]]
+            });
+         
+         // 监听操作列
+            table.on('tool(table-zhanpin-filter)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                if(layEvent == 'delete'){
+                    layer.confirm('您确认删除该展品记录：'+data.name + " ？", {icon: 3, title:'删除确认'}, function(index){
+                        // 异步请求删除数据、结果提示、刷新表格
+                        var url = ctxPath + "zhanpin/deletedtlpre/" + data.dtlId;
+                        var params = {
+                            _method:"DELETE"
+                        }
+                        $.post(url,params,function (response) {
+                            if(response.code == 0){
+                            	// 成功提示
+                                layer.msg(response.message, {
+                                    icon: 1,
+                                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                                }, function(){
+
+                                    // 关闭窗口
+                                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                    parent.layer.close(index); //再执行关闭
+                                });
+                            }else{
+                            	
+                            	
+                            	layer.confirm("该展品仅剩一条明细，删除后会删除该展品信息，是否确认删除？", {icon: 3, title:'删除确认'}, function(index){
+                                    // 异步请求删除数据、结果提示、刷新表格
+                                    var url = ctxPath + "zhanpin/deletedtlandinfo/" + data.dtlId;
+                                    var params = {
+                                        _method:"DELETE"
+                                    }
+                                    $.post(url,params,function (response) {
+                                        if(response.code == 0){
+                                        	// 成功提示
+                                            layer.msg(response.message, {
+                                                icon: 1,
+                                                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                                            }, function(){
+                                                // 关闭窗口
+                                                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                                parent.layer.close(index); //再执行关闭
+                                            });
+                                        }else{
+                                            layer.alert(response.message, {icon: 2,anim:6 });
+                                        }
+                                    });
+                                    layer.close(index);
+                                });
+                            	
+                            	
+                            }
+                        });
+
+                        layer.close(index);
+                    });
+                }else if(layEvent == 'edit'){
+                    layer.open({
+                        type: 2,
+                        title: "修改展品",
+                        shadeClose: false,
+                        area: ['100%', '100%'],
+                        content: '/zhanpin/dtlid/' + data.dtlId
+                    });
+                }
             });
             
 

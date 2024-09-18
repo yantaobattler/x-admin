@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tky.zhanpin.entity.ZhanpinDept;
 import com.tky.zhanpin.entity.ZhanpinDtl;
+import com.tky.common.vo.Result;
 import com.tky.zhanpin.entity.Zhanpin;
 import com.tky.zhanpin.mapper.ZhanpinDeptMapper;
 import com.tky.zhanpin.mapper.ZhanpinDtlMapper;
@@ -86,6 +87,59 @@ public class ZhanpinServiceImpl implements ZhanpinService {
     @Override
     public void addZhanpinDtl(Zhanpin zhanpin) {
     	zhanpindtlMapper.addZhanpinDtl(zhanpin);
+    }
+    
+    
+    @Override
+    public ZhanpinDtl getZhanpinDtlById(Integer id) {
+    	return zhanpindtlMapper.getZhanpinDtlById(id);
+    }
+    
+    
+    @Override
+    public void updateZhanpindtl(ZhanpinDtl zhanpindtl) {
+    	zhanpindtlMapper.updateZhanpinDtl(zhanpindtl);
+    }
+    
+    
+    
+    @Override
+    public Result<Object> deleteZhanpinDtlpre(Integer id) {
+    	ZhanpinDtl dtl = zhanpindtlMapper.getZhanpinDtlById(id);
+    	Long count = zhanpindtlMapper.countZhanpinDtlbyzhanpin(dtl.getZhanpinId());
+    	if (count < 2) {
+    		return Result.fail();
+    	} else {
+    		zhanpindtlMapper.deleteZhanpinDtlByid(id);
+    		updateZhanpinByLastDtl(dtl);
+    		return Result.success("删除展品明细信息成功！");
+    	}
+    }
+    
+    
+    
+    @Override
+    public void deleteZhanpinDtlandinfo(int id) {
+    	ZhanpinDtl dtl = zhanpindtlMapper.getZhanpinDtlById(id);
+    	zhanpindtlMapper.deleteZhanpinDtlByid(id);
+    	zhanpinMapper.deleteZhanpinByid(dtl.getZhanpinId());
+    }
+    
+    
+    @Override
+    public void updateZhanpinByLastDtl(ZhanpinDtl zhanpindtl) {
+    	Zhanpin zhanpin = zhanpinMapper.getZhanpinById(zhanpindtl.getZhanpinId());
+    	ZhanpinDtl last = zhanpindtlMapper.getlastDtl(zhanpindtl.getZhanpinId());
+    	zhanpin.setQixian(last.getQixian());
+    	zhanpin.setNum(last.getNum());
+    	zhanpin.setYijiao(last.getYijiao());
+    	zhanpin.setDeptId(last.getDeptId());
+    	zhanpin.setPname(last.getPname());
+    	zhanpin.setPtel(last.getPtel());
+    	zhanpin.setBeizhu(last.getBeizhu());
+    	zhanpin.setAddress(last.getAddress());
+    	zhanpin.setAddress1(last.getAddress1());
+    	zhanpinMapper.updateZhanpin(zhanpin);
     }
     
     
