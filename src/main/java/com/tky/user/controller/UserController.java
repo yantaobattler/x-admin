@@ -184,6 +184,13 @@ public class UserController {
     
     
     
+//    @GetMapping("/{ids}/editroleuserUI")
+//    public Result<Object> editroleuserUI(@PathVariable("ids") String user_id, Model model){
+//        return userService.rstpwd(user_id);
+//    }
+//    
+    
+    
     
     
 }

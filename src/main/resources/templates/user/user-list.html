@@ -209,7 +209,7 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: ctx + "user/select-rule?id="+data.user_id,
+                    content: ctx + "user/"+data.user_id+"/editroleuserUI",
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
