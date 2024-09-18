@@ -248,14 +248,14 @@
             // 表单提交
             form.on('submit(btn-submit-filter)', function(data){
 
-                if(fileupload.attr("value") == null){
-                    layer.msg('请上传展品照片', {icon: 2});
-                    return false;
-                  }
-                if(fileupload1.attr("value") == null){
-                    layer.msg('请上传展位照片', {icon: 2});
-                    return false;
-                  }
+                //if(fileupload.attr("value") == null){
+                //    layer.msg('请上传展品照片', {icon: 2});
+                //    return false;
+                //  }
+                //if(fileupload1.attr("value") == null){
+                //    layer.msg('请上传展位照片', {icon: 2});
+                //    return false;
+                //  }
                 $("#btn-submit").attr("disabled","disabled").addClass("layui-btn-disabled");
                 
                 // 异步请求提交数据
