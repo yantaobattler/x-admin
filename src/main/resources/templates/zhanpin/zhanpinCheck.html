@@ -119,8 +119,8 @@
                     ,{field: 'num', title: '数量', width:80 ,align: 'center'}
                     ,{field: 'pname', title: '交接人', width:90 ,align: 'center'}
                     ,{field: 'ptel', title: '联系电话', width:130 ,align: 'center'}
-                    ,{field: 'address', title: '展品照片', width:100 ,align: 'center', templet: function(d) { return '<div onclick="show_img(this)"><img src="../../'+d.address.split(".")[0].substring(d.address.split(".")[0].length - 36)+'.'+d.address.split(".")[1]+'" ' + 'alt="" width="40px" height="40px"></a></div>'; }}
-                    ,{field: 'address1', title: '展位照片', width:100 ,align: 'center', templet: function(d) { return '<div onclick="show_img(this)"><img src="../../'+d.address1.split(".")[0].substring(d.address1.split(".")[0].length - 36)+'.'+d.address1.split(".")[1]+'" ' + 'alt="" width="40px" height="40px"></a></div>'; }}
+                    ,{field: 'address', title: '展品照片', width:100 ,align: 'center', templet: function(d) {if(!d.address){return '无'} else {   return '<div onclick="show_img(this)"><img src="../../'+d.address.split(".")[0].substring(d.address.split(".")[0].length - 36)+'.'+d.address.split(".")[1]+'" ' + 'alt="" width="40px" height="40px"></a></div>'; }}}
+                    ,{field: 'address1', title: '展位照片', width:100 ,align: 'center', templet: function(d) {if(!d.address){return '无'} else {   return '<div onclick="show_img(this)"><img src="../../'+d.address1.split(".")[0].substring(d.address1.split(".")[0].length - 36)+'.'+d.address1.split(".")[1]+'" ' + 'alt="" width="40px" height="40px"></a></div>'; }}}
                     ,{field: 'beizhu', title: '备注', align: 'center'}
                     //,{field: 'address', title: '家庭住址'}
                     ,{title: '操作', align: 'center', width: 120,toolbar: '#col-zhanpin-toolbar'}
