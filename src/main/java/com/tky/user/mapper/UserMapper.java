@@ -21,4 +21,6 @@ public interface UserMapper {
 	public void chgUserdisabled(User user);
 
 	public void rstpwd(User user);
+
+	public List<User> getAllUser();
 }

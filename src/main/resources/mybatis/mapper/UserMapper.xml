@@ -81,4 +81,11 @@
     <update id="rstpwd" parameterType="User">
         update u_user set password=#{password} where user_id=#{user_id}
     </update>
+    
+    
+    <select id="getAllUser"  resultMap="userMap">
+        select * from u_user a   order by user_id desc
+
+    </select>
+    
 </mapper>

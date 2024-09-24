@@ -1,7 +1,11 @@
 package com.tky.user.controller;
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
 import com.tky.common.vo.Result;
+import com.tky.user.entity.Role;
 import com.tky.user.entity.User;
+import com.tky.user.service.RoleService;
 import com.tky.user.service.UserService;
 import com.tky.user.vo.UserQuery;
 import com.tky.zhanpin.entity.Zhanpin;
@@ -17,9 +21,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +41,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private RoleService roleService;
 
 //    带验证码
 //    @PostMapping("/login1")
@@ -184,11 +193,35 @@ public class UserController {
     
     
     
-//    @GetMapping("/{ids}/editroleuserUI")
-//    public Result<Object> editroleuserUI(@PathVariable("ids") String user_id, Model model){
-//        return userService.rstpwd(user_id);
-//    }
-//    
+    @GetMapping("/{id}/editroleuserUI")
+    public String editroleuserUI(@PathVariable("id") int user_id, Model model){
+    	model.addAttribute("user_id", user_id);
+        return "user/edit-role-user";
+    }
+    
+    
+    @GetMapping("/{id}/getusertreeByuser")
+    @ResponseBody
+    public List<?> getusertreeByuser(@PathVariable("id") int user_id){
+    	List<?> usertree = userService.getusertreeByuser(user_id);
+        return usertree;
+    }
+    
+    
+    @GetMapping("/{id}/getroletreeByuser")
+    @ResponseBody
+    public List<?> getroletreeByuser(@PathVariable("id") int user_id){
+    	List<?> roletree = userService.getroletreeByuser(user_id);
+        return roletree;
+    }
+    
+    
+    @PostMapping("/editroleuserByuser")
+    @ResponseBody
+    public Result<Object> editroleuserByuser(String roletree, String usertree){
+
+        return roleService.editroleuserByuser(roletree, usertree);
+    }
     
     
     

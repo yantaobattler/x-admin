@@ -8,7 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -56,6 +58,54 @@ public class RoleController {
 	public Result<Object> addUser(Role role){	  	
 	    return roleService.addRole(role);
 	}
+	
+	
+	@GetMapping("/torole-userUI/{id}")
+    public String toroleuserUI(@PathVariable("id") int role_id, Model model){
+    	model.addAttribute("role_id", role_id);
+        return "user/edit-role-user2";
+    }
+	
+	
+	@GetMapping("/{id}/getusertreeByrole")
+    @ResponseBody
+    public List<?> getusertreeByrole(@PathVariable("id") int role_id){
+    	List<?> usertree = roleService.getusertreeByrole(role_id);
+        return usertree;
+    }
+    
+    
+    @GetMapping("/{id}/getroletreeByrole")
+    @ResponseBody
+    public List<?> getroletreeByrole(@PathVariable("id") int role_id){
+    	List<?> roletree = roleService.getroletreeByrole(role_id);
+        return roletree;
+    }
+    
+    
+    @PostMapping("/editroleuserByrole")
+    @ResponseBody
+    public Result<Object> editroleuserByrole(String roletree, String usertree){
+
+        return roleService.editroleuserByrole(roletree, usertree);
+    }
+    
+    
+    @GetMapping("/torole-menuUI/{id}")
+    public String torolemenuUI(@PathVariable("id") int role_id, Model model){
+    	model.addAttribute("role_id", role_id);
+        return "user/edit-role-menu";
+    }
+    
+    
+    @GetMapping("/{id}/getmenutreeByrole")
+    @ResponseBody
+    public List<?> getmenutreeByrole(@PathVariable("id") int role_id){
+    	List<?> menutree = roleService.getmenutreeByrole(role_id);
+    	
+    	
+        return menutree;
+    }
     
     
 //    @PutMapping("/userinfo")

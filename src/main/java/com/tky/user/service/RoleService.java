@@ -13,6 +13,16 @@ public interface RoleService {
 	Long countRoleList(RoleQuery param);
 
 	Result<Object> addRole(Role role);
+
+	Result<Object> editroleuserByuser(String roletree, String usertree);
+
+	List<?> getusertreeByrole(int role_id);
+
+	List<?> getroletreeByrole(int role_id);
+
+	Result<Object> editroleuserByrole(String roletree, String usertree);
+
+	List<?> getmenutreeByrole(int role_id);
 	
 
 }

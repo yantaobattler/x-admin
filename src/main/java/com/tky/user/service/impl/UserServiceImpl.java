@@ -5,14 +5,19 @@ import org.springframework.stereotype.Service;
 
 import com.tky.common.vo.Result;
 import com.tky.user.entity.User;
+import com.tky.user.entity.Role;
+import com.tky.user.mapper.RoleMapper;
 import com.tky.user.mapper.UserMapper;
 import com.tky.user.service.UserService;
 import com.tky.user.vo.UserQuery;
 import com.tky.zhanpin.entity.Zhanpin;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -21,6 +26,8 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private RoleMapper roleMapper;
 
     @Override
     public User login(User user) {
@@ -98,5 +105,43 @@ public class UserServiceImpl implements UserService {
 		userMapper.rstpwd(user);
     	return Result.success();
     }
+	
+	
+	@Override
+    public List<?> getusertreeByuser(int user_id) {
+		List<Object> usertree = new ArrayList();
+		List <User> allusers = userMapper.getAllUser();
+		for (User user : allusers) {
+			Map<String,Object> tmp = new HashMap<>();
+			tmp.put("title", user.getChinesename());
+			tmp.put("id", user.getUser_id());
+			if ( user_id == user.getUser_id()) {
+				tmp.put("checked", true);
+			} else {
+				tmp.put("disabled", true);
+			}
+			usertree.add(tmp);
+		}
+		
+    	return usertree;
+    }
+
+	@Override
+	public List<?> getroletreeByuser(int user_id) {
+		List<Object> roletree = new ArrayList();
+		List <?> myroles = roleMapper.getmyroles(user_id);
+		List <Role> allroles = roleMapper.getAllRoles();
+		for (Role role : allroles) {
+			Map<String,Object> tmp = new HashMap<>();
+			tmp.put("title", role.getRole_name());
+			tmp.put("id", role.getRole_id());
+			if ( myroles.contains(role.getRole_id())) {
+				tmp.put("checked", true);
+			} 
+			roletree.add(tmp);
+		}
+		
+    	return roletree;
+	}
 
 }

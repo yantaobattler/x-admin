@@ -3,7 +3,11 @@ package com.tky.user.service.impl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.tky.common.vo.Result;
+import com.tky.user.entity.Menu;
 import com.tky.user.entity.Role;
 import com.tky.user.entity.User;
 import com.tky.user.mapper.RoleMapper;
@@ -15,8 +19,11 @@ import com.tky.user.vo.UserQuery;
 import com.tky.zhanpin.entity.Zhanpin;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -25,6 +32,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Resource
     private RoleMapper roleMapper;
+    
+    @Resource
+    private UserMapper userMapper;
 
 
 	@Override
@@ -47,8 +57,123 @@ public class RoleServiceImpl implements RoleService {
 		
 		return Result.success("新增角色成功！");
 	}
+
+	
+	@Override
+	public Result<Object> editroleuserByuser(String roletree, String usertree) {
+		
+		JSONArray data = JSON.parseArray(roletree);
+		ArrayList<Integer> role_ids = new ArrayList<Integer>();
+		for (int i = 0; i < data.size(); i++) {
+			JSONObject obj = JSON.parseObject(data.getString(i));
+			role_ids.add(obj.getInteger("id"));
+		}
+				
+		JSONArray data1 = JSON.parseArray(usertree);
+		ArrayList<Integer> user_ids = new ArrayList<Integer>();
+		for (int i = 0; i < data1.size(); i++) {
+			JSONObject obj = JSON.parseObject(data1.getString(i));
+			user_ids.add(obj.getInteger("id"));
+		}
+		
+//		System.out.println(role_ids);
+//		System.out.println(user_ids);
+		
+		for (int user_id : user_ids) {
+			roleMapper.deleteroleuserByuser(user_id);
+			for (int role_id : role_ids) {
+				roleMapper.addroleuser(user_id, role_id);
+			}
+		}
+		
+		return Result.success("用户角色调整成功！");
+	}
+
+	@Override
+	public List<?> getusertreeByrole(int role_id) {
+		List<Object> usertree = new ArrayList();
+		List <?> myusers = roleMapper.getmyusers(role_id);
+		List <User> allusers = userMapper.getAllUser();
+		for (User user : allusers) {
+			Map<String,Object> tmp = new HashMap<>();
+			tmp.put("title", user.getChinesename());
+			tmp.put("id", user.getUser_id());
+			if ( myusers.contains(user.getUser_id())) {
+				tmp.put("checked", true);
+			} 
+			usertree.add(tmp);
+		}
+		
+    	return usertree;
+	}
+
+	@Override
+	public List<?> getroletreeByrole(int role_id) {
+		List<Object> roletree = new ArrayList();
+		List <Role> allroles = roleMapper.getAllRoles();
+		for (Role role : allroles) {
+			Map<String,Object> tmp = new HashMap<>();
+			tmp.put("title", role.getRole_name());
+			tmp.put("id", role.getRole_id());
+			if ( role_id == role.getRole_id()) {
+				tmp.put("checked", true);
+			} else {
+				tmp.put("disabled", true);
+			}
+			roletree.add(tmp);
+		}
+		
+    	return roletree;
+	}
 	
 	
+	@Override
+	public Result<Object> editroleuserByrole(String roletree, String usertree) {
+		
+		JSONArray data = JSON.parseArray(roletree);
+		ArrayList<Integer> role_ids = new ArrayList<Integer>();
+		for (int i = 0; i < data.size(); i++) {
+			JSONObject obj = JSON.parseObject(data.getString(i));
+			role_ids.add(obj.getInteger("id"));
+		}
+				
+		JSONArray data1 = JSON.parseArray(usertree);
+		ArrayList<Integer> user_ids = new ArrayList<Integer>();
+		for (int i = 0; i < data1.size(); i++) {
+			JSONObject obj = JSON.parseObject(data1.getString(i));
+			user_ids.add(obj.getInteger("id"));
+		}
+		
+		System.out.println(role_ids);
+		System.out.println(user_ids);
+		
+		for (int role_id : role_ids) {
+			roleMapper.deleteroleuserByrole(role_id);
+			for (int user_id : user_ids) {
+				roleMapper.addroleuser(user_id, role_id);
+			}
+		}
+		
+		return Result.success("用户角色调整成功！");
+	}
+
+	@Override
+	public List<?> getmenutreeByrole(int role_id) {
+//		List<Object> menutree = new ArrayList();
+//		List <?> mymenu = roleMapper.getmymenus(role_id);
+//		List <Menu> allmenus = menuMapper.getAllUser();
+//		for (Menu menu : allmenus) {
+//			Map<String,Object> tmp = new HashMap<>();
+//			tmp.put("title", user.getChinesename());
+//			tmp.put("id", user.getUser_id());
+//			if ( myusers.contains(user.getUser_id())) {
+//				tmp.put("checked", true);
+//			} 
+//			usertree.add(tmp);
+//		}
+		
+    	return null;
+	}
 	
 	
 //	
