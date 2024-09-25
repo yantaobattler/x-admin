@@ -19,10 +19,11 @@
         <result column="delete_at" property="delete_at"/>
     </resultMap>
 
-    <select id="getInitmenu" parameterType="User" resultType="User">
+    <select id="getmymenubyuser"  resultMap="menuMap">
         select * from u_system_menu where sys_menu_id in 
         (select sys_menu_id from u_role_sys_menu where role_id in 
-        (select role_id from u_user_role where user_id ='1'))
+        (select role_id from u_user_role where user_id = #{user_id} and disabled="0") and disabled="0")
+        and disabled="0"
     </select>
     
     
@@ -84,5 +85,7 @@
         delete from u_system_menu  where sys_menu_id=#{id}
     </delete>
     
-    
+    <select id="getAllMenus"  resultMap="menuMap">
+        select * from u_system_menu 
+    </select>
 </mapper>

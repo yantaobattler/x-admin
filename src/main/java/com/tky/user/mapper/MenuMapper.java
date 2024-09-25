@@ -26,4 +26,8 @@ public interface MenuMapper {
 
 	void deleteMenu(String id);
 
+	List<Menu> getAllMenus();
+
+	List<Menu> getmymenubyuser(Integer user_id);
+
 }

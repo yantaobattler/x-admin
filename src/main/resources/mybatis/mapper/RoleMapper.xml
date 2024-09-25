@@ -89,5 +89,23 @@
     <delete id="deleteroleuserByrole" parameterType="Integer">
         delete from u_user_role where role_id=#{role_id}
     </delete>
+    
+    
+    <select id="getmymenus" parameterType="Integer" resultType="Integer">
+        select sys_menu_id from u_role_sys_menu where role_id=#{role_id}
+    </select>
+    
+    
+    <delete id="deleterolemenuByrole" parameterType="Integer">
+        delete from u_role_sys_menu where role_id=#{role_id}
+    </delete>
+    
+    
+    <insert id="addrolemenu" parameterType="Integer">
+        insert into u_role_sys_menu
+        (sys_menu_id, role_id)
+        values
+        (#{menu_id},#{role_id})
+    </insert>
  
 </mapper>

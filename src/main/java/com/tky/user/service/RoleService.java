@@ -2,8 +2,10 @@ package com.tky.user.service;
 
 import java.util.List;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.tky.common.vo.Result;
 import com.tky.user.entity.Role;
+import com.tky.user.entity.User;
 import com.tky.user.vo.RoleQuery;
 
 public interface RoleService {
@@ -23,6 +25,10 @@ public interface RoleService {
 	Result<Object> editroleuserByrole(String roletree, String usertree);
 
 	List<?> getmenutreeByrole(int role_id);
+
+	Result<Object> editrolemenuByrole(String roletree, String menutree);
+
+	JSONObject getInitmenu(User user);
 	
 
 }

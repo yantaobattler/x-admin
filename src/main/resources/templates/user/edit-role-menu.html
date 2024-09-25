@@ -73,8 +73,7 @@
        	              elem: '#menutree',
        	              id: 'menutree',
        	              data: data,
-       	              showCheckbox: true,
-       	           	  showLine: false
+       	              showCheckbox: true
        	              //edit: ['add', 'update', 'del'] // 开启节点的右侧操作图标
        	            });
         	    }
@@ -104,11 +103,12 @@
 
                 $("#btn-submit").attr("disabled","disabled").addClass("layui-btn-disabled");
                 // 异步请求提交数据
-                var url = "/role/editroleuserByrole";
-                var usertree = tree.getChecked('usertree');
+                var url = "/role/editrolemenuByrole";
+                var menutree = tree.getChecked('menutree');
                 var roletree = tree.getChecked('roletree');
-                data.field.usertree = JSON.stringify(usertree);
-                data.field.roletree = JSON.stringify(roletree);                
+                data.field.menutree = JSON.stringify(menutree);
+                data.field.roletree = JSON.stringify(roletree);   
+                
 
                 $.post(url,data.field,function (response) {
 

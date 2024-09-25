@@ -1,7 +1,9 @@
 package com.tky.user.controller;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.tky.common.vo.Result;
 import com.tky.user.entity.Role;
+import com.tky.user.entity.User;
 import com.tky.user.service.RoleService;
 import com.tky.user.vo.RoleQuery;
 import lombok.extern.slf4j.Slf4j;
@@ -107,6 +109,24 @@ public class RoleController {
         return menutree;
     }
     
+    
+    @PostMapping("/editrolemenuByrole")
+    @ResponseBody
+    public Result<Object> editrolemenuByrole(String roletree, String menutree){
+
+        return roleService.editrolemenuByrole(roletree, menutree);
+    }
+    
+    
+    
+    @GetMapping("/getInitmenu")
+    @ResponseBody
+    public JSONObject getInitmenu(HttpSession session){
+    	
+    	User user = (User) session.getAttribute("userInfo");
+   	
+        return roleService.getInitmenu(user);
+    }
     
 //    @PutMapping("/userinfo")
 //    @ResponseBody

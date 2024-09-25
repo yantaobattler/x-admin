@@ -66,9 +66,15 @@ public class MenuController {
 	
 	@GetMapping("/creat")
 	public String toAddmenuUI(Model model, String pid){
-		Menu menu = menuService.getMenubyid(pid);
-		model.addAttribute("pname", menu.getTitle());
-		model.addAttribute("pid", pid);
+		if ("0".equals(pid)) {
+			model.addAttribute("pname", "顶级菜单");
+			model.addAttribute("pid", pid);
+		} else {
+			Menu menu = menuService.getMenubyid(pid);
+			model.addAttribute("pname", menu.getTitle());
+			model.addAttribute("pid", pid);
+		}
+		
 	    return "user/menu_add";
 	}
 	

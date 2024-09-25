@@ -26,5 +26,11 @@ public interface RoleMapper {
 
 	void deleteroleuserByrole(int role_id);
 
+	List<?> getmymenus(int role_id);
+
+	void deleterolemenuByrole(int role_id);
+
+	void addrolemenu(int menu_id, int role_id);
+
 
 }
