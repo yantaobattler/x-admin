@@ -14,4 +14,9 @@ public interface ZhanpinDtlMapper {
     void deleteZhanpinDtlByIds(String ids);
     ZhanpinDtl getZhanpinDtlById(Integer id);
     void updateZhanpinDtl(ZhanpinDtl zhanpindtl);
+	ZhanpinDtl getlastDtl(Integer zhanpinId);
+	Long countZhanpinDtl(Integer id);
+	void deleteZhanpinDtlByid(Integer id);
+	Long countZhanpinDtlbyzhanpin(Integer zhanpinId);
+
 }

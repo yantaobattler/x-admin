@@ -14,4 +14,5 @@ public interface ZhanpinMapper {
     void updateZhanpin(Zhanpin zhanpin);
     
     int getZhanpinIdByName(String name);
+	void deleteZhanpinByid(Integer zhanpinId);
 }
