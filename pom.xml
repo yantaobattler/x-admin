@@ -66,6 +66,11 @@
             <artifactId>spring-security-core</artifactId>
             <version>5.4.2</version>
         </dependency>
+        <dependency>
+		  <groupId>com.dahuatech.icc</groupId>
+		  <artifactId>java-sdk-oauth</artifactId>
+		  <version>1.0.13.7</version>
+		</dependency>
     </dependencies>
     
    <build>
