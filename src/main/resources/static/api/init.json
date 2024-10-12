@@ -29,9 +29,25 @@
             }
             
           ]
+        },
+        {
+          "title": "大华系统",
+          "href": "",
+          "icon": "fa fa-home",
+          "target": "_self",
+          "child": [
+            {
+              "title": "监控",
+              "href": "dahua/monitor",
+              "icon": "layui-icon layui-icon-user",
+              "target": "_self"
+            }
+            
+          ]
         }
         
       ]
     }
+    
   ]
 }
