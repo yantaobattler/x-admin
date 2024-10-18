@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新增会议室</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/css/layuimini.css?v=2.0.4.2}" media="all">
+    <link rel="stylesheet" th:href="@{/css/themes/default.css}" media="all">
+    <link rel="stylesheet" th:href="@{/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <style>
+        body{
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">会议室名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="roomname" required  lay-verify="required" placeholder="请输入会议室名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">园区</label>
+        <div class="layui-input-block">
+            <input type="radio" name="park" value="天开园核心区" title="天开园核心区" checked>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">会议室位置</label>
+        <div class="layui-input-block">
+            <select name="building" >
+               <option value="">请选择</option>
+               <option value="5号楼">5号楼</option>
+               <option value="6号楼">6号楼</option>
+               <option value="3-5裙楼">3-5裙楼</option>
+               <option value="综合服务中心">综合服务中心</option>
+               <option value="大报告厅">大报告厅</option>
+               <option value="展示中心">展示中心</option>
+               <option value="会议中心">会议中心</option>
+           </select>
+        </div>
+    </div>
+
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">建议人数</label>
+        <div class="layui-input-block">
+            <input type="text" name="num" required  lay-verify="required" placeholder="请输入建议人数" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">最大人数</label>
+        <div class="layui-input-block">
+            <input type="text" name="maxnum" required  lay-verify="required" placeholder="请输入最大人数" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">会议室类型</label>
+        <div class="layui-input-block">
+            <select name="roomtype" >
+               <option value="">请选择</option>
+               <option value="A">A</option>
+               <option value="B">B</option>
+               <option value="C">C</option>
+               <option value="D">D</option>
+               <option value="E">E</option>
+           </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">设备设施</label>
+        <div class="layui-input-block">
+            <input type="text" name="device" required  lay-verify="required" placeholder="请输入设备设施" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否可对外预定</label>
+        <div class="layui-input-block">
+            <input type="radio" name="disabled" value="0" title="可预定" >
+            <input type="radio" name="disabled" value="1" title="不可预定" checked>
+        </div>
+    </div>
+    
+   
+    <div class="layui-form-inline">
+    	<input type="hidden" name="address1"  class="address1" >
+    	<label class="layui-form-label">预览1</label>
+    	<div class="layui-upload"> 	         
+	         <div class="layui-upload-list"> 
+		          <img class="layui-upload-img" id="demo1" width="400px" height="auto"> 
+		          <p id="demoText1"></p> 
+	         </div> 
+    	</div>
+    </div>
+    <br/>
+    <div class="layui-form-inline">
+    	<input type="hidden" name="address2"  class="address2" >
+    	<label class="layui-form-label">预览2</label>
+    	<div class="layui-upload"> 	         
+	         <div class="layui-upload-list"> 
+		          <img class="layui-upload-img" id="demo2" width="400px" height="auto"> 
+		          <p id="demoText2"></p> 
+	         </div> 
+    	</div>
+    </div>
+    <br/>
+    <div class="layui-form-inline">
+    	<input type="hidden" name="address3"  class="address3" >
+    	<label class="layui-form-label">预览3</label>
+    	<div class="layui-upload"> 	         
+	         <div class="layui-upload-list"> 
+		          <img class="layui-upload-img" id="demo3" width="400px" height="auto"> 
+		          <p id="demoText3"></p> 
+	         </div> 
+    	</div>
+    </div>
+    
+    
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+        	<button type="button" class="layui-btn" id="uploadbutten1">上传会议室照片1</button> 
+        	<button type="button" class="layui-btn" id="uploadbutten2">上传会议室照片2</button> 
+        	<button type="button" class="layui-btn" id="uploadbutten3">上传会议室照片3</button> 
+            <button id="btn-submit" class="layui-btn" lay-submit lay-filter="btn-submit-filter">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+    <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+    <script th:inline="javascript">
+        var ctxPath = "/";
+        layui.use(['laydate','table','form', 'upload', 'element'], function(){
+            var laydate = layui.laydate;
+            var table = layui.table;
+            var form = layui.form;
+            var upload = layui.upload;
+            var element = layui.element;
+            var $ = layui.$;
+            
+            var fileupload1 = $(".address1");
+            var fileupload2 = $(".address2");
+            var fileupload3 = $(".address3");
+
+
+          //常规使用 - 普通图片上传---照片
+            var uploadInst1 = upload.render({
+              elem: '#uploadbutten1'
+              ,url: "/meetingroom/uploadImage/1"
+              ,accept: 'file'
+              ,size: 1000
+              ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                  $('#demo1').attr('src', result); //图片链接（base64）
+                });
+                index = layer.load();
+              }
+              ,done: function(res){
+                //如果上传失败
+                if(res.code > 0){
+                  layer.close(index);
+                  return layer.msg('上传失败');
+                }
+                
+                
+                fileupload1.attr("value", res.data.src);
+                 
+                $('#demoText1').html(''); //置空上传失败的状态
+                layer.close(index);
+                layer.msg('上传完毕', {icon: 1});
+              }
+              ,error: function(){
+            	  layer.close(index);
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText1');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload1">重试</a>');
+                demoText.find('.demo-reload1').on('click', function(){
+                  uploadInst1.upload();
+                });
+              }
+
+            });
+          
+          //常规使用 - 普通图片上传---照片
+            var uploadInst2 = upload.render({
+              elem: '#uploadbutten2'
+              ,url: "/meetingroom/uploadImage/2"
+              ,accept: 'file'
+              ,size: 1000
+              ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                  $('#demo2').attr('src', result); //图片链接（base64）
+                });
+                index = layer.load();
+              }
+              ,done: function(res){
+                //如果上传失败
+                if(res.code > 0){
+                  layer.close(index);
+                  return layer.msg('上传失败');
+                }
+                
+                
+                fileupload2.attr("value", res.data.src);
+                 
+                $('#demoText2').html(''); //置空上传失败的状态
+                layer.close(index);
+                layer.msg('上传完毕', {icon: 1});
+              }
+              ,error: function(){
+            	  layer.close(index);
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText2');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload2">重试</a>');
+                demoText.find('.demo-reload2').on('click', function(){
+                  uploadInst2.upload();
+                });
+              }
+
+            });
+          
+          //常规使用 - 普通图片上传---照片
+            var uploadInst3 = upload.render({
+              elem: '#uploadbutten3'
+              ,url: "/meetingroom/uploadImage/3"
+              ,accept: 'file'
+              ,size: 1000
+              ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                  $('#demo3').attr('src', result); //图片链接（base64）
+                });
+                index = layer.load();
+              }
+              ,done: function(res){
+                //如果上传失败
+                if(res.code > 0){
+                  layer.close(index);
+                  return layer.msg('上传失败');
+                }
+                
+                
+                fileupload3.attr("value", res.data.src);
+                 
+                $('#demoText3').html(''); //置空上传失败的状态
+                layer.close(index);
+                layer.msg('上传完毕', {icon: 1});
+              }
+              ,error: function(){
+            	  layer.close(index);
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText3');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload3">重试</a>');
+                demoText.find('.demo-reload3').on('click', function(){
+                  uploadInst3.upload();
+                });
+              }
+
+            });
+
+          
+            // 表单提交
+            form.on('submit(btn-submit-filter)', function(data){
+            	
+            	
+                $("#btn-submit").attr("disabled","disabled").addClass("layui-btn-disabled");
+                // 异步请求提交数据
+                var url = "/meetingroom/addroom";
+                $.post(url,data.field,function (response) {
+                    if(response.code == 0){
+                        // 成功提示
+                        layer.msg(response.message, {
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        }, function(){
+                            // 刷新表格
+                            parent.refreshTable();
+                            // 关闭窗口
+                            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                            parent.layer.close(index); //再执行关闭
+                        });
+
+                    }else{
+                        $("#btn-submit").removeAttr("disabled","disabled").removeClass("layui-btn-disabled");
+                        // 失败则提示错误信息，窗口不关闭
+                        layer.msg("新增失败，请联系管理员", {
+                            icon: 2,
+                            anim: 6
+                        });
+                    }
+                });
+                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            });
+        });
+    </script>
+</body>
+</html>

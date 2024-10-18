@@ -146,27 +146,26 @@ public class ZhanpinServiceImpl implements ZhanpinService {
     
     @Override
     public Map<String, Object> uploadImage(MultipartFile file, HttpServletRequest request) {
-    	System.out.println(1);
+
     	String prefix="";
         //保存上传
         OutputStream out = null;
         InputStream fileInput=null;
-        System.out.println(2);
+
         try{
-        	System.out.println(3);
+
             if(file!=null){
-            	System.out.println(4);
+
                 String originalName = file.getOriginalFilename();
-                System.out.println(5);
+ 
                 prefix=originalName.substring(originalName.lastIndexOf(".")+1);
-                System.out.println(6);
+
                 String uuid = UUID.randomUUID()+"";
-                System.out.println(7);
+
                 String projectRootPath = System.getProperty("user.dir");
-                System.out.println(8);
+ 
                 String filepath = projectRootPath+"/upload/"+uuid+"." + prefix;
                 //打印查看上传路径
-                System.out.println(filepath);
 
                 File files=new File(filepath);
 
