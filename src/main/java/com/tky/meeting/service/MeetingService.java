@@ -9,7 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tky.common.vo.Result;
 import com.tky.meeting.entity.MeetingRoom;
+import com.tky.meeting.entity.RoomStatus;
 import com.tky.meeting.vo.MeetingRoomQuery;
+import com.tky.meeting.vo.RoomStatusQuery;
 
 public interface MeetingService {
 
@@ -28,6 +30,10 @@ public interface MeetingService {
 	Result<Object> deleteMeetingRoom(String id);
 
 	Result<Object> editMeetingRoom(MeetingRoom meetingroom);
+
+	List<RoomStatus> getRoomStatusList(RoomStatusQuery param);
+
+	Long countRoomStatusList(RoomStatusQuery param);
 
 
 	

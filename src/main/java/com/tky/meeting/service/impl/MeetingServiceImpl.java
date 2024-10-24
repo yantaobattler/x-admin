@@ -5,9 +5,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tky.common.vo.Result;
 import com.tky.meeting.entity.MeetingRoom;
+import com.tky.meeting.entity.RoomStatus;
 import com.tky.meeting.mapper.MeetingRoomMapper;
+import com.tky.meeting.mapper.RoomStatusMapper;
 import com.tky.meeting.service.MeetingService;
 import com.tky.meeting.vo.MeetingRoomQuery;
+import com.tky.meeting.vo.RoomStatusQuery;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +29,8 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Resource
     private MeetingRoomMapper meetingroomMapper;
+    @Resource
+    private RoomStatusMapper roomstatusMapper;
     
     
     @Override
@@ -149,6 +154,16 @@ public class MeetingServiceImpl implements MeetingService {
 		meetingroomMapper.updateMeetingRoom(meetingroom);
 		return Result.success("修改会议室成功！");
 		
+	}
+
+	@Override
+	public List<RoomStatus> getRoomStatusList(RoomStatusQuery param) {
+		return roomstatusMapper.getRoomStatusList(param);
+	}
+
+	@Override
+	public Long countRoomStatusList(RoomStatusQuery param) {
+		return roomstatusMapper.countRoomStatusList(param);
 	}
 
 
