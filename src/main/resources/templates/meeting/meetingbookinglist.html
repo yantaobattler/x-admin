@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/css/layuimini.css?v=2.0.4.2}" media="all">
+    <link rel="stylesheet" th:href="@{/css/themes/default.css}" media="all">
+    <link rel="stylesheet" th:href="@{/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <style>
+        .div-content{
+            background-color: white;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        .table-search-fieldset {
+            margin: 0;
+            border: 1px solid #e6e6e6;
+            padding: 10px 20px 5px 20px;
+            color: #6b6b6b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="div-content">
+        <form class="layui-form layui-form-pane" id="form-search">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索条件</legend>
+            <div class="layui-form-item">
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">会议日期</label>
+                    <div class="layui-input-inline" style="width: 200px;">
+                        <input type="text" name="startdate" placeholder="会议日期" autocomplete="off" class="layui-input date">
+                    </div>
+                </div>
+                
+                <div class="layui-input-inline"  style="width: 250px;">
+			        <label class="layui-form-label">会议室位置</label>
+			        <div class="layui-input-block">
+			            <select name="building" >
+			                <option value="">请选择</option>
+			                <option value="5号楼">5号楼</option>
+			                <option value="6号楼">6号楼</option>
+			                <option value="3-5裙楼">3-5裙楼</option>
+			                <option value="综合服务中心">综合服务中心</option>
+			                <option value="大报告厅">大报告厅</option>
+			                <option value="展示中心">展示中心</option>
+			                <option value="会议中心">会议中心</option>
+			            </select>
+			        </div>
+			    </div>
+
+			    <div class="layui-inline" >
+                    <label class="layui-form-label">容纳人数</label>
+                    <div class="layui-input-block">
+			            <select name="people" >
+			                <option value="0">无限制</option>
+			                <option value="10">10人及以下</option>
+			                <option value="20">11-20人</option>
+			                <option value="50">21-50人</option>
+			                <option value="100">51-100人</option>
+			                <option value="999">100人以上</option>
+			            </select>
+			        </div>
+                </div>
+                
+
+                
+
+
+                <div class="layui-inline">
+                    <button id="btn-search" lay-submit lay-filter="btn-search-filter" type="button" class="layui-btn layui-btn-radius layui-btn-normal">
+                        <i class="layui-icon layui-icon-search"></i>
+                        搜索
+                    </button>
+                    <button id="btn-reset"  type="reset" class="layui-btn layui-btn-radius layui-btn-primary">
+                        <i class="layui-icon layui-icon-fonts-clear"></i>
+                        清空条件
+                    </button>
+                </div>
+
+            </div>
+        </fieldset>
+        </form>
+
+        <table id="table-meetingroom" lay-filter="table-meetingroom-filter" class="layui-table"></table>
+    </div>
+
+
+
+    <script type="text/html" id="table-meetingroom-toolbar">
+        <div class="layui-btn-container">
+
+        </div>
+    </script>
+
+    <script type="text/html" id="col-meetingroom-toolbar">
+		<a class="layui-btn layui-btn-xs" lay-event="booking">预约</a>
+    </script>
+    
+    <script type="text/html" id="booking-time-line">
+        {{#
+            if(d.0700 === '1'){
+                <span style="color: #66CCFF;"></span>
+            }
+        }}
+    </script>
+
+
+    <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}" charset="utf-8"></script>
+    <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+    <script th:inline="javascript">
+
+        function refreshTable(){
+            $("#btn-reset").click();
+            $("#btn-search").click();
+        }
+
+        var ctxPath = "";
+        layui.use(['laydate','table','form'], function(){
+            var laydate = layui.laydate;
+            var table = layui.table;
+            var form = layui.form;
+
+            // 表格头部工具栏监听
+
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '.date' //指定元素
+            });
+
+            // 会议室列表表格渲染
+            table.render({
+                elem: '#table-meetingroom'
+                ,url:  '/meetingbooking/list' //数据接口
+                ,page: true //开启分页
+                ,toolbar: "#table-meetingroom-toolbar"
+                ,scrollPos :'reset'
+                ,limits: [5,10,30,50,100]
+            	,cellMinWidth: 80
+                ,cols: [[ //表头
+                    //{type: "checkbox",width:60},
+                    //{field: 'meetingroomId', title: '会议室编号', width:120, sort: true,align: 'center'},
+                    {field: 'roomname', title: '会议室名称', width:140,align: 'center'}
+                    ,{field: '0700', title: '7', width:15, templet: '#booking-time-line'}
+                    ,{field: '0730', title: '', width:15, templet: '#booking-time-line'}
+                    ,{field: '0800', title: '8', width:15, templet: '#booking-time-line'}
+                    ,{field: '0830', title: '', width:15, templet: '#booking-time-line'}
+                    ,{field: '0900', title: '9', width:15, templet: '#booking-time-line'}
+                    ,{field: '0930', title: '', width:15, templet: '#booking-time-line'}
+                    ,{field: '1000', title: '10', width:15, templet: '#booking-time-line'}
+                    ,{field: '1030', title: '', width:15, templet: '#booking-time-line'}
+                    ,{field: '1100', title: '11', width:15, templet: '#booking-time-line'}
+                    ,{field: '1130', title: '', width:15, templet: '#booking-time-line'}
+                    ,{field: '1200', title: '12', width:15, templet: '#booking-time-line'}
+                    ,{field: '1230', title: '', width:15, templet: '#booking-time-line'}
+                    ,{field: '1300', title: '13', width:15, templet: '#booking-time-line'}
+                    ,{field: '1330', title: '', width:15, templet: '#booking-time-line'}
+                    ,{field: '1400', title: '14', width:15, templet: '#booking-time-line'}
+                    ,{field: '1430', title: '', width:15, templet: '#booking-time-line'}
+                    ,{field: '1500', title: '15', width:15, templet: '#booking-time-line'}
+                    ,{field: '1530', title: '', width:15, templet: '#booking-time-line'}
+                    ,{field: '1600', title: '16', width:15, templet: '#booking-time-line'}
+                    ,{field: '1630', title: '', width:15, templet: '#booking-time-line'}
+                    ,{field: '1700', title: '17', width:15, templet: '#booking-time-line'}
+                    ,{field: '1730', title: '', width:15, templet: '#booking-time-line'}
+                    ,{field: '1800', title: '18', width:15, templet: '#booking-time-line'}
+                    ,{field: '1830', title: '', width:15, templet: '#booking-time-line'}
+                    ,{field: '1900', title: '19', width:15, templet: '#booking-time-line'}
+                    ,{field: '1930', title: '', width:15, templet: '#booking-time-line'}
+                    ,{field: '2000', title: '20', width:15, templet: '#booking-time-line'}
+                    ,{field: '2030', title: '', width:15, templet: '#booking-time-line'}
+                    ,{field: '2100', title: '21', width:15, templet: '#booking-time-line'}
+                    ,{field: '2130', title: '', width:15, templet: '#booking-time-line'}
+                    ,{title: '操作', align: 'center', width: 60,toolbar: '#col-meetingroom-toolbar'}
+                ]]
+            });
+            
+
+
+            // 监听表单提交
+            form.on('submit(btn-search-filter)', function(data){
+                console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+                // 刷新表格
+                table.reload('table-meetingroom', {
+                    where: { //设定异步数据接口的额外参数，任意设
+                    	startdate: data.field.startdate,
+                    	building: data.field.building,
+                    	people: data.field.people
+                    }
+                    ,page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                });
+                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            });
+
+            // 监听操作列
+            table.on('tool(table-meetingroom-filter)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                if(layEvent == 'booking'){
+                    layer.open({
+                        type: 2,
+                        title: "预约会议室",
+                        shadeClose: false,
+                        area: ['100%', '100%'],
+                        content: '/meetingbooking/booking/UI/' + data.startdate + '/'+ data.roomid
+                    });
+                }
+            });
+        });
+        
+        function show_img(t) {
+        	var t = $(t).find("img");
+        	//页面层
+        	layer.open({
+        		type: 1,
+        		title: '会议室照片',
+        		skin: 'layui-layer-rim', //加上边框
+        		area: ['80%', '80%'], //宽高 t.width() t.height()
+        		shadeClose: true, //开启遮罩关闭
+        		end: function (index, layero) {
+        			return false;
+        		},
+        		content: '<div style="text-align:center"><img src="' + $(t).attr('src') + '"  width="100%" height="auto"/></div>'
+        	});
+        }
+    </script>
+</body>
+</html>

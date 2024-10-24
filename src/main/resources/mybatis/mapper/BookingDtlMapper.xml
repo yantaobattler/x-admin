@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.meeting.mapper.BookingDtlMapper">
+    
+    <resultMap id="bookingdtlMap" type="BookingDtl">
+        <id column="booking_id" property="booking_id" />
+        <result column="user_id" property="user_id"/>
+        <result column="roomid" property="roomid"/>
+        <result column="username" property="username"/>
+        <result column="bookingdate" property="bookingdate"/>
+        <result column="startdate" property="startdate"/>
+        <result column="starttime" property="starttime"/>
+        <result column="endtime" property="endtime"/>
+        <result column="pay_status" property="pay_status"/>
+        <result column="booking_status" property="booking_status"/>
+        <result column="meeting_theme" property="meeting_theme"/>
+        <result column="meeting_content" property="meeting_content"/>
+        <result column="main_guest" property="main_guest"/>
+        <result column="organizers" property="organizers"/>
+        <result column="p_name" property="p_name"/>
+        <result column="p_tel" property="p_tel"/>
+        <result column="p_wechat" property="p_wechat"/>
+        <result column="table_card" property="table_card"/>
+    </resultMap>
+    
+
+    <select id="getBookingDtlList" parameterType="com.tky.meeting.vo.BookingDtlQuery" resultMap="bookingdtlMap">
+        select * from m_booking_dtl a
+        <include refid="getBookingDtlListWhere"></include>
+        order by booking_id desc
+        limit #{start},#{limit}
+    </select>
+
+    <select id="countBookingDtlList" parameterType="com.tky.meeting.vo.BookingDtlQuery" resultType="Long">
+        select count(1) from m_booking_dtl a
+        <include refid="getBookingDtlListWhere"></include>
+    </select>
+
+    <sql id="getBookingDtlListWhere">
+        <where>
+            <if test="booking_id != null and booking_id != '' ">
+                a.booking_id = #{booking_id} 
+            </if>
+            <if test="user_id != null and user_id != '' ">
+                <![CDATA[
+                and a.user_id = #{user_id} 
+                ]]>
+            </if>
+            <if test="roomid != null and roomid != '' ">
+                <![CDATA[
+                and a.roomid = #{roomid} 
+                ]]>
+            </if>
+            <if test="username != null and username != '' ">
+                <![CDATA[
+                and a.username like '%' #{username} '%'
+                ]]>
+            </if>
+            <if test="bookingdate != null and bookingdate != '' ">
+                <![CDATA[
+                and a.bookingdate = #{bookingdate} 
+                ]]>
+            </if>
+            <if test="startdate != null and startdate != '' ">
+                <![CDATA[
+                and a.startdate = #{startdate} 
+                ]]>
+            </if>
+            <if test="starttime != null and starttime != '' ">
+                <![CDATA[
+                and a.starttime = #{starttime} 
+                ]]>
+            </if>
+            <if test="endtime != null and endtime != '' ">
+                <![CDATA[
+                and a.endtime = #{endtime} 
+                ]]>
+            </if>
+            <if test="pay_status != null and pay_status != '' ">
+                <![CDATA[
+                and a.pay_status = #{pay_status} 
+                ]]>
+            </if>
+            <if test="booking_status != null and booking_status != '' ">
+                <![CDATA[
+                and a.booking_status = #{booking_status} 
+                ]]>
+            </if>
+
+        </where>
+    </sql>
+
+    
+
+    
+    
+    <delete id="deleteBookingDtlByid" parameterType="String">
+        delete from m_booking_dtl  where booking_id = #{booking_id}
+    </delete>
+
+    <select id="getBookingDtlById" parameterType="String" resultType="BookingDtl">
+        select * from m_booking_dtl  where booking_id = #{booking_id} 
+    </select>
+    
+    
+    
+    <insert id="addBookingDtl" parameterType="BookingDtl">
+        insert into m_booking_dtl
+        (user_id,roomid,username,bookingdate,startdate,starttime,endtime,pay_status,booking_status,meeting_theme,meeting_content,main_guest,organizers,p_name,p_tel,p_wechat,table_card)
+        values
+        (#{user_id},#{roomid},#{username},#{bookingdate},#{startdate},#{starttime},#{endtime},#{pay_status},#{booking_status},#{meeting_theme},#{meeting_content},#{main_guest},#{organizers},#{p_name},#{p_tel},#{p_wechat},#{table_card})
+    </insert>
+    
+
+    <update id="updateBookingDtl" parameterType="BookingDtl">
+        update m_booking_dtl
+        set user_id = #{user_id},
+            roomid = #{roomid},
+            username = #{username},
+            bookingdate = #{bookingdate},
+            startdate = #{startdate},
+            starttime = #{starttime},
+            endtime = #{endtime},
+            pay_status = #{pay_status},
+            booking_status = #{booking_status},
+            meeting_theme = #{meeting_theme},
+            meeting_content = #{meeting_content},
+            main_guest = #{main_guest},
+            organizers = #{organizers},
+            p_name = #{p_name},
+            p_tel = #{p_tel},
+            p_wechat = #{p_wechat},
+            table_card = #{table_card},
+        where booking_id = #{booking_id} 
+
+    </update>
+    
+
+</mapper>

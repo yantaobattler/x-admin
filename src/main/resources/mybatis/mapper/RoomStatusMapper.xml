@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.meeting.mapper.RoomStatusMapper">
+    
+    <resultMap id="roomstatusMap" type="RoomStatus">
+        <id column="roomid" property="roomid" />
+        <result column="building" property="building"/>
+        <result column="startdate" property="startdate"/>
+        <result column="status" property="status"/>
+        
+    </resultMap>
+    
+
+    <select id="getRoomStatusList" parameterType="com.tky.meeting.vo.RoomStatusQuery" resultMap="roomstatusMap">
+        select * from m_room_booking_status a, m_room b
+        <include refid="getRoomStatusListWhere"></include>
+        order by roomid desc
+        limit #{start},#{limit}
+    </select>
+
+    <select id="countRoomStatusList" parameterType="com.tky.meeting.vo.RoomStatusQuery" resultType="Long">
+        select count(1) from m_room_booking_status a
+        <include refid="getRoomStatusListWhere"></include>
+    </select>
+
+    <sql id="getRoomStatusListWhere">
+        <where>
+            <if test="roomid != null and roomid != '' ">
+                a.roomid = #{roomid} 
+            </if>
+            <if test="startdate != null and startdate != '' ">
+                <![CDATA[
+                and a.startdate = #{startdate} 
+                ]]>
+            </if>
+            <if test="building != null and building != '' ">
+                <![CDATA[
+                and a.building = #{building}
+                ]]>
+            </if>
+            <if test="people != null and people != '' ">
+                <![CDATA[
+                and a.people <= #{people}
+                ]]>
+            </if>
+
+        </where>
+    </sql>
+
+    
+
+    
+    
+    <delete id="deleteRoomStatusByid" parameterType="String">
+        delete from m_room_booking_status  where roomid = #{roomid} and   startdate = #{startdate}
+    </delete>
+
+    <select id="getRoomStatusById" parameterType="String" resultType="RoomStatus">
+        select * from m_room_booking_status  where roomid = #{roomid} and   startdate = #{startdate}
+    </select>
+    
+    
+    
+    <insert id="addRoomStatus" parameterType="RoomStatus">
+        insert into m_room_booking_status
+        (roomid,building,startdate,status)
+        values
+        (#{roomid},#{building},#{startdate},#{status})
+    </insert>
+    
+
+    <update id="updateRoomStatus" parameterType="RoomStatus">
+        update m_room_booking_status
+        set building = #{building},
+            status = #{status},
+        where roomid = #{roomid} 
+        and   startdate = #{startdate}
+    </update>
+    
+
+</mapper>
